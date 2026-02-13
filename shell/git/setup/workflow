@@ -83,10 +83,10 @@ echo
 # Copy all files to correct directories
 echo "ℹ️  Copying files..."
 
-mkdir -p automation
+mkdir -p auto
 for file in "$AUTHOR_DIR/GitHub-Tools/shell/git/repo/"*; do
-    cp "$file" "$AUTHOR_DIR/automation/"
-    chmod +x "$AUTHOR_DIR/automation/$(basename "$file")"
+    cp "$file" "$AUTHOR_DIR/auto/"
+    chmod +x "$AUTHOR_DIR/auto/$(basename "$file")"
 done
 for file in "$AUTHOR_DIR/GitHub-Tools/shell/git/bulk/"*; do
     cp "$file" "$AUTHOR_DIR/"
@@ -109,8 +109,8 @@ echo "✅ Files copied!"
 
 echo
 
-# Add /automation/ to each repo's .git/info/exclude
-FILES=(/automation/ /automation/pull /automation/push /automation/status)
+# Add /auto/ to each repo's .git/info/exclude
+FILES=(/auto/ /auto/pull /auto/push /auto/status)
 
 all_success=true
 failed_repos=()
@@ -148,17 +148,17 @@ else
     done
 fi
 
-# Add automation/ to repos
+# Add auto/ to repos
 for d in */; do
-    if [ "$d" != "automation/" ]; then
-        cp -r automation "$d" || echo "❌ Failed to copy automation to $d"
+    if [ "$d" != "auto/" ]; then
+        cp -r auto "$d" || echo "❌ Failed to copy auto to $d"
     fi
 done
 
-rm -rf automation || echo "❌ Failed to remove temporary automation folder"
+rm -rf auto || echo "❌ Failed to remove temporary auto folder"
 
-# Ensure all automation scripts in each repo are executable
-for d in */automation/; do
+# Ensure all auto scripts in each repo are executable
+for d in */auto/; do
     [ -d "$d" ] || continue
     find "$d" -type f -exec chmod +x {} \;
 done
