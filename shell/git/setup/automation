@@ -100,7 +100,7 @@ done
 echo "✅ Files copied!"
 
 # Add auto/ to */.git/info/exclude
-FILES=(/auto/ /auto/pull /auto/push /auto/status)
+FILES=(/auto/pull /auto/push /auto/status)
 
 for d in */; do
     [ "$d" = "auto/" ] && continue

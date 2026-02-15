@@ -110,7 +110,7 @@ echo "✅ Files copied!"
 echo
 
 # Add /auto/ to each repo's .git/info/exclude
-FILES=(/auto/ /auto/pull /auto/push /auto/status)
+FILES=(/auto/pull /auto/push /auto/status)
 
 all_success=true
 failed_repos=()
