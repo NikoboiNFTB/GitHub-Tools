@@ -9,8 +9,8 @@ SCRIPT_PATH=$(readlink -f "${BASH_SOURCE[0]}")
 current_dir=$(basename "$PWD")
 
 # Determine what to add based on folder
-if [ "$current_dir" = "automation" ]; then
-    echo "Detected 'automation/' folder. Adding parent repo files..."
+if [ "$current_dir" = "auto" ]; then
+    echo "Detected 'auto/' folder. Adding parent repo files..."
     echo
     git add ..
 else
