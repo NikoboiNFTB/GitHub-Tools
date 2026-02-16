@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+set -e
+
+# --- Folders to ignore ---
+EXCLUDE_DIRS=(
+  "./FreeCAD"
+  "*/.git"
+  "*/.old"
+  "*/fontawesome-free-7.2.0-web"
+  "*/website-to-apk"
+)
+
+# --- File patterns to ignore ---
+EXCLUDE_FILES=(
+  "*.png"
+  "*.jpg"
+  "*.ico"
+  "*.zip"
+  "*.txt"
+  "*.jar"
+  "*.md"
+  "*.xpi"
+  "*.webp"
+  "*.py"
+  "*.css"
+  "*.json"
+  "*.yml"
+  "*.svg"
+  "*.mcmeta"
+  "*.java"
+  "*.html"
+  "LICENSE"
+)
+
+# --- Build the -path ... -prune part for directories ---
+PRUNE_DIRS=""
+for dir in "${EXCLUDE_DIRS[@]}"; do
+  if [[ -z "$PRUNE_DIRS" ]]; then
+    PRUNE_DIRS="-path \"$dir\""
+  else
+    PRUNE_DIRS="$PRUNE_DIRS -o -path \"$dir\""
+  fi
+done
+
+# --- Build the ! -name ... part for files ---
+EXCLUDE_NAMES=""
+for file in "${EXCLUDE_FILES[@]}"; do
+  EXCLUDE_NAMES="$EXCLUDE_NAMES ! -name \"$file\""
+done
+
+# --- Run find ---
+eval "find . \( $PRUNE_DIRS \) -prune -o -type f $EXCLUDE_NAMES -printf '%s %p\n' | sort -n"
