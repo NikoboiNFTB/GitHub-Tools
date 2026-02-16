@@ -46,37 +46,37 @@ $HOME
 └── GitHub
     ├── NikoboiNFTB
     │   ├── DeSlop
-    │   │   ├── automation/
+    │   │   ├── auto/
     │   │   │   ├── pull
     │   │   │   ├── push
     │   │   │   └── status
     │   │   └── *
     │   ├── GitHub-Tools
-    │   │   ├── automation/
+    │   │   ├── auto/
     │   │   │   ├── pull
     │   │   │   ├── push
     │   │   │   └── status
     │   │   └── *
     │   ├── IMDb-RePo
-    │   │   ├── automation/
+    │   │   ├── auto/
     │   │   │   ├── pull
     │   │   │   ├── push
     │   │   │   └── status
     │   │   └── *
     │   ├── nikoboinftb.github.io
-    │   │   ├── automation/
+    │   │   ├── auto/
     │   │   │   ├── pull
     │   │   │   ├── push
     │   │   │   └── status
     │   │   └── *
     │   ├── TMDB-RePo
-    │   │   ├── automation/
+    │   │   ├── auto/
     │   │   │   ├── pull
     │   │   │   ├── push
     │   │   │   └── status
     │   │   └── *
     │   ├── YouTube-Tweaks
-    │   │   ├── automation/
+    │   │   ├── auto/
     │   │   │   ├── pull
     │   │   │   ├── push
     │   │   │   └── status
@@ -84,14 +84,14 @@ $HOME
     │   ├── all-pull
     │   ├── all-push
     │   ├── all-status
-    │   ├── compare
-    │   ├── disable-ssh
-    │   ├── enable-ssh
     │   ├── ignore
-    │   └── ignore-reset
+    │   ├── ignore-reset
+    │   ├── .disable-ssh
+    │   └── .enable-ssh
     ├── clone-author
     ├── clone-repo
-    └── mass-pull
+    ├── mass-pull
+    └── new-repo
 ```
 
 ## Installation
