@@ -1,0 +1,20 @@
+! Title: GitHub Filters by Nikoboi
+! Description: Removes user profile pictures.
+! Homepage: https://nikoboi.dev/
+! Author: Nikoboi
+! License: GNU General Public License v3.0 | https://github.com/NikoboiNFTB/GitHub-Tools/blob/main/LICENSE
+! Source: https://github.com/NikoboiNFTB/GitHub-Tools/raw/refs/heads/main/blocklist.txt
+! Issues: https://github.com/NikoboiNFTB/GitHub-Tools/issues
+! Pull Requests: https://github.com/NikoboiNFTB/GitHub-Tools/pulls
+! Last updated: 2026-02-17 10:35 UTC+02:00
+! Expires: 7 days
+
+! ========================================
+! Start of Filters
+! ========================================
+
+github.com##a[href^="https://avatars.githubusercontent.com/"]
+
+! ========================================
+! End of Filters
+! ========================================
