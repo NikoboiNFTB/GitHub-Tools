@@ -27,7 +27,12 @@ if [ -z "$commit_msg" ]; then
 fi
 
 # Commit and push
-git commit -m "$commit_msg"
+if git diff --cached --quiet; then
+    echo "Nothing new to commit"
+else
+    git commit -m "$commit_msg"
+fi
+
 git push
 
 # Hang
