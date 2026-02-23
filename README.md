@@ -1,3 +1,5 @@
+⚠️  Warning: Several of the SSH related tools (including setting up and using) are broken right now.
+
 # GitHub-Tools
 
 A collection of scripts and userscripts for automating GitHub maintenance and repository management.
