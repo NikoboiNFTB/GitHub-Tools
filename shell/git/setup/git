@@ -44,9 +44,9 @@ chmod 644 "$PUB_KEY_FILE"
 ok "SSH key files exist with correct permissions"
 
 # Start ssh-agent if needed
-if [[ -z "${SSH_AUTH_SOCK:-}" ]]; then
-    info "Starting ssh-agent..."
-    eval "$(ssh-agent -s)"
+if ! ssh-add -l >/dev/null 2>&1; then
+    info "Starting fresh ssh-agent..."
+    eval "$(ssh-agent -s)" >/dev/null
 fi
 ok "SSH agent running"
 
@@ -56,15 +56,6 @@ if ! ssh-add -l | grep -q "$(ssh-keygen -lf "$KEY_FILE" | awk '{print $2}')"; th
     ssh-add "$KEY_FILE" || die "Failed to add SSH key to agent"
 fi
 ok "SSH key loaded into agent"
-
-# Test GitHub SSH connectivity
-SSH_TEST_OUTPUT="$(ssh -T git@github.com 2>&1 || true)"
-if echo "$SSH_TEST_OUTPUT" | grep -Eq "successfully authenticated|Hi "; then
-    ok "GitHub SSH authentication works"
-else
-    echo "$SSH_TEST_OUTPUT"
-    die "SSH authentication to GitHub failed. Add your public key to GitHub."
-fi
 
 # Print the public key
 echo
@@ -84,14 +75,24 @@ echo "   - Paste the key"
 echo "3. After adding, press ENTER to continue..."
 read -rp ""
 
-# Test SSH connection to GitHub interactively
+# Test GitHub SSH connectivity AFTER user adds key
 info "Testing GitHub SSH connection..."
 echo
-ssh -T git@github.com || true
+
+SSH_TEST_OUTPUT="$(ssh -T git@github.com 2>&1 || true)"
+
+if echo "$SSH_TEST_OUTPUT" | grep -Eq "successfully authenticated|Hi "; then
+    ok "GitHub SSH authentication passed"
+else
+    echo "$SSH_TEST_OUTPUT"
+    die "SSH authentication to GitHub failed. Make sure the public key was added correctly."
+fi
+
 echo
 ok "Git + SSH setup complete"
 info "You can now run my other scripts for full PC git setup:"
-echo "   bash <(wget -qO- https://nikoboinftb.github.io/shell/git/setup/automation)"
+echo "     bash <(wget -qO- https://nikoboinftb.github.io/shell/git/setup/automation)"
+echo "       (Completely optional, obviously)"
 
 # Hang
 
