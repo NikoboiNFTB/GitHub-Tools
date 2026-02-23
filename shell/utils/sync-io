@@ -9,3 +9,61 @@ if [ -z "$HOME" ]; then
 fi
 
 # Definitions
+GITHUB_DIR="$HOME/GitHub"
+AUTHOR="NikoboiNFTB"
+AUTHOR_DIR="$GITHUB_DIR/$AUTHOR"
+
+if [ ! -d "$AUTHOR_DIR" ]; then
+    echo "❌ $AUTHOR_DIR does not exist";
+    exit 1;
+fi
+
+cd "$AUTHOR_DIR"
+
+for repo in nikoboinftb.github.io GitHub-Tools Proton-VPN Guitar-Pro-On-Linux; do
+    if [ ! -d "$repo" ]; then
+        echo "❌ $repo is missing or can't be pulled"
+        exit 1
+    else
+        (
+            echo "⬇️  Pulling $repo..."
+            git -C "$repo" pull > /dev/null 2>&1
+        ) &
+    fi
+done
+
+wait
+
+echo "✅ All pulls completed."
+
+# Sync updates from repos to github.io for specific directories
+declare -A DIR_PAIRS=(
+    ["shell/git/setup"]="GitHub-Tools/shell/git/setup"
+    ["shell/utils"]="GitHub-Tools/shell/utils"
+    ["shell/gp8"]="Guitar-Pro-On-Linux"
+    ["shell/proton"]="Proton-VPN"
+)
+
+BASE_IO="$AUTHOR_DIR/nikoboinftb.github.io"
+
+for io_subdir in "${!DIR_PAIRS[@]}"; do
+    SRC_REPO="${DIR_PAIRS[$io_subdir]}"
+    IO_DIR="$BASE_IO/$io_subdir"
+    SRC_DIR="$AUTHOR_DIR/$SRC_REPO"
+
+    # Only proceed if both directories exist
+    [ -d "$IO_DIR" ] || continue
+    [ -d "$SRC_DIR" ] || continue
+
+    # Loop over files in github.io directory
+    find "$IO_DIR" -type f | while read -r io_file; do
+        rel_path="${io_file#$IO_DIR/}"       # relative path inside subdir
+        src_file="$SRC_DIR/$rel_path"
+
+        # Only copy if file exists in source and differs
+        if [ -f "$src_file" ] && ! cmp -s "$io_file" "$src_file"; then
+            echo "🔄 Updating $io_file from $SRC_REPO"
+            cp "$src_file" "$io_file"
+        fi
+    done
+done
