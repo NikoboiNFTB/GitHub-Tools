@@ -84,18 +84,26 @@ else
 fi
 
 echo
-ok "Setup simulation complete"
-info "Next steps (run in your shell to persist agent and connect):"
-echo "  1. Start a real ssh-agent:"
-echo "       eval \"\$(ssh-agent -s)\""
-echo "  2. Add your key:"
-echo "       ssh-add ~/.ssh/id_ed25519_github"
-echo "  3. Test GitHub connection:"
-echo "       ssh -T git@github.com"
+ok "Setup complete"
 echo
-info "After that, you can run my other scripts for full PC git setup:"
-echo "       bash <(wget -qO- https://nikoboinftb.github.io/shell/git/setup/automation)"
+info "You can now run my other scripts for a full local git workflow setup:"
+echo "     bash <(wget -qO- https://nikoboinftb.github.io/shell/git/setup/automation)"
 echo "       (Completely optional)"
+echo
+echo "┌───────────────────── ⚠️  IMPORTANT ⚠️  ─────────────────────┐"
+echo "│                                                           │"
+echo "│   Due to limitations, these steps must be run manually:   │"
+echo "│                                                           │"
+echo "│     1. Start an ssh-agent:                                │"
+echo "│          eval \"\$(ssh-agent -s)\"                           │" # What the fuck is this?
+echo "│                                                           │"
+echo "│     2. Add the key:                                       │"
+echo "│          ssh-add ~/.ssh/id_ed25519_github                 │"
+echo "│                                                           │"
+echo "│     3. Test GitHub connection (optional):                 │"
+echo "│          ssh -T git@github.com                            │"
+echo "│                                                           │"
+echo "└───────────────────── ⚠️  IMPORTANT ⚠️  ─────────────────────┘"
 
 # Hang
 
