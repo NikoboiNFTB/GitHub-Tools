@@ -92,7 +92,7 @@ echo
 ok "Git + SSH setup complete"
 info "You can now run my other scripts for full PC git setup:"
 echo "     bash <(wget -qO- https://nikoboinftb.github.io/shell/git/setup/automation)"
-echo "       (Completely optional, obviously)"
+echo "       (Completely optional)"
 
 # Hang
 
