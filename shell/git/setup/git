@@ -9,31 +9,26 @@ SSH_DIR="$HOME/.ssh"
 KEY_FILE="$SSH_DIR/id_ed25519_github"
 PUB_KEY_FILE="$KEY_FILE.pub"
 
-# Helpers
-die() { echo "❌ $1" >&2; exit 1; }
-info() { echo "ℹ️  $1"; }
-ok() { echo "✅ $1"; }
-
-info "Running preflight checks..."
+echo "ℹ️  Running preflight checks..."
 
 # Check HOME
-[[ -n "$HOME" ]] || die "HOME variable not set."
-ok "HOME exists: $HOME"
+[[ -n "$HOME" ]] || { echo "❌ HOME variable not set." >&2; exit 1; }
+echo "✅ HOME exists: $HOME"
 
 # Check required commands
 for cmd in git ssh ssh-keygen ssh-add; do
-    command -v "$cmd" >/dev/null || die "$cmd is required but not installed."
-    ok "$cmd found"
+    command -v "$cmd" >/dev/null || { echo "❌ $cmd is required but not installed." >&2; exit 1; }
+    echo "✅ $cmd found"
 done
 
 # Ensure .ssh directory exists
 mkdir -p "$SSH_DIR"
 chmod 700 "$SSH_DIR"
-ok ".ssh directory exists with proper permissions"
+echo "✅ .ssh directory exists with proper permissions"
 
 # Generate SSH key if missing
 if [[ ! -f "$KEY_FILE" ]]; then
-    info "No SSH key found. Generating id_ed25519_github..."
+    echo "ℹ️  No SSH key found. Generating id_ed25519_github..."
     read -rp "Enter a comment for the SSH key (optional, press ENTER to skip): " KEY_COMMENT
     ssh-keygen -t ed25519 -f "$KEY_FILE" -N "" -C "$KEY_COMMENT"
 fi
@@ -41,25 +36,26 @@ fi
 # Set correct permissions
 chmod 600 "$KEY_FILE"
 chmod 644 "$PUB_KEY_FILE"
-ok "SSH key files exist with correct permissions"
+echo "✅ SSH key files exist with correct permissions"
 
 # Start temporary ssh-agent for simulation
-info "Starting temporary ssh-agent for testing..."
+echo "ℹ️  Starting temporary ssh-agent for testing..."
 eval "$(ssh-agent -s)" >/dev/null
-ok "Temporary ssh-agent running"
+echo "✅ Temporary ssh-agent running"
 
 # Add key to temporary agent
-info "Adding key to temporary ssh-agent..."
-ssh-add "$KEY_FILE" || die "Failed to add SSH key to temporary agent"
-ok "SSH key loaded into temporary agent"
+echo "ℹ️  Adding key to temporary ssh-agent..."
+ssh-add "$KEY_FILE" || { echo "❌ Failed to add SSH key to temporary agent"; exit 1; }
+echo "✅ SSH key loaded into temporary agent"
 
 # Print the public key for GitHub
 echo
-info "================ SSH PUBLIC KEY ================"
+echo "───────────────────── ℹ️  PUBLIC KEY ℹ️  ─────────────────────"
 echo
 cat "$PUB_KEY_FILE"
 echo
-info "================================================"
+echo "───────────────────── ℹ️  PUBLIC KEY ℹ️  ─────────────────────"
+
 echo
 
 # Prompt user to add the key to GitHub
@@ -72,24 +68,26 @@ echo "3. After adding, press ENTER to continue..."
 read -rp ""
 
 # Test SSH connection in this temporary simulation
-info "Testing GitHub SSH connection with temporary agent..."
+echo "ℹ️  Testing GitHub SSH connection with temporary agent..."
 echo
 SSH_TEST_OUTPUT="$(ssh -T git@github.com 2>&1 || true)"
 
 if echo "$SSH_TEST_OUTPUT" | grep -Eq "successfully authenticated|Hi "; then
-    ok "Simulation: GitHub SSH authentication succeeded"
+    echo "✅ Simulation: GitHub SSH authentication succeeded"
 else
     echo "$SSH_TEST_OUTPUT"
     echo "Simulation: Authentication may fail until key is added and agent is running in your shell"
 fi
 
 echo
-ok "Setup complete"
+echo "✅ Setup complete"
 echo
-info "You can now run my other scripts for a full local git workflow setup:"
+echo "ℹ️  You can now run my other scripts for a full local git workflow setup:"
 echo "     bash <(wget -qO- https://nikoboinftb.github.io/shell/git/setup/automation)"
 echo "       (Completely optional)"
 echo
+
+# Important steps box
 echo "┌───────────────────── ⚠️  IMPORTANT ⚠️  ─────────────────────┐"
 echo "│                                                           │"
 echo "│   Due to limitations, these steps must be run manually:   │"
