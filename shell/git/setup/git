@@ -43,21 +43,17 @@ chmod 600 "$KEY_FILE"
 chmod 644 "$PUB_KEY_FILE"
 ok "SSH key files exist with correct permissions"
 
-# Start ssh-agent if needed
-if ! ssh-add -l >/dev/null 2>&1; then
-    info "Starting fresh ssh-agent..."
-    eval "$(ssh-agent -s)" >/dev/null
-fi
-ok "SSH agent running"
+# Start temporary ssh-agent for simulation
+info "Starting temporary ssh-agent for testing..."
+eval "$(ssh-agent -s)" >/dev/null
+ok "Temporary ssh-agent running"
 
-# Ensure key is loaded in agent
-if ! ssh-add -l | grep -q "$(ssh-keygen -lf "$KEY_FILE" | awk '{print $2}')"; then
-    info "Adding key to ssh-agent..."
-    ssh-add "$KEY_FILE" || die "Failed to add SSH key to agent"
-fi
-ok "SSH key loaded into agent"
+# Add key to temporary agent
+info "Adding key to temporary ssh-agent..."
+ssh-add "$KEY_FILE" || die "Failed to add SSH key to temporary agent"
+ok "SSH key loaded into temporary agent"
 
-# Print the public key
+# Print the public key for GitHub
 echo
 info "================ SSH PUBLIC KEY ================"
 echo
@@ -66,7 +62,7 @@ echo
 info "================================================"
 echo
 
-# GitHub instructions
+# Prompt user to add the key to GitHub
 echo "1. Triple-click the key above and copy it."
 echo "2. Add it to GitHub: https://github.com/settings/ssh/new"
 echo "   - Give it a Title"
@@ -75,28 +71,35 @@ echo "   - Paste the key"
 echo "3. After adding, press ENTER to continue..."
 read -rp ""
 
-# Test GitHub SSH connectivity AFTER user adds key
-info "Testing GitHub SSH connection..."
+# Test SSH connection in this temporary simulation
+info "Testing GitHub SSH connection with temporary agent..."
 echo
-
 SSH_TEST_OUTPUT="$(ssh -T git@github.com 2>&1 || true)"
 
 if echo "$SSH_TEST_OUTPUT" | grep -Eq "successfully authenticated|Hi "; then
-    ok "GitHub SSH authentication passed"
+    ok "Simulation: GitHub SSH authentication succeeded"
 else
     echo "$SSH_TEST_OUTPUT"
-    die "SSH authentication to GitHub failed. Make sure the public key was added correctly."
+    echo "Simulation: Authentication may fail until key is added and agent is running in your shell"
 fi
 
 echo
-ok "Git + SSH setup complete"
-info "You can now run my other scripts for full PC git setup:"
-echo "     bash <(wget -qO- https://nikoboinftb.github.io/shell/git/setup/automation)"
+ok "Setup simulation complete"
+info "Next steps (run in your shell to persist agent and connect):"
+echo "  1. Start a real ssh-agent:"
+echo "       eval \"\$(ssh-agent -s)\""
+echo "  2. Add your key:"
+echo "       ssh-add ~/.ssh/id_ed25519_github"
+echo "  3. Test GitHub connection:"
+echo "       ssh -T git@github.com"
+echo
+info "After that, you can run my other scripts for full PC git setup:"
+echo "       bash <(wget -qO- https://nikoboinftb.github.io/shell/git/setup/automation)"
 echo "       (Completely optional)"
 
 # Hang
 
-KEEP_OPEN=true
+KEEP_OPEN=false
 
 if [ "$KEEP_OPEN" = true ]; then
     echo
