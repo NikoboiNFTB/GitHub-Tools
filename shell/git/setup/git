@@ -6,7 +6,7 @@ set -euo pipefail
 SCRIPT_PATH=$(readlink -f "${BASH_SOURCE[0]}")
 
 SSH_DIR="$HOME/.ssh"
-KEY_FILE="$SSH_DIR/id_ed25519"
+KEY_FILE="$SSH_DIR/id_ed25519_github"
 PUB_KEY_FILE="$KEY_FILE.pub"
 
 # Helpers
@@ -33,7 +33,7 @@ ok ".ssh directory exists with proper permissions"
 
 # Generate SSH key if missing
 if [[ ! -f "$KEY_FILE" ]]; then
-    info "No SSH key found. Generating id_ed25519..."
+    info "No SSH key found. Generating id_ed25519_github..."
     read -rp "Enter a comment for the SSH key (optional, press ENTER to skip): " KEY_COMMENT
     ssh-keygen -t ed25519 -f "$KEY_FILE" -N "" -C "$KEY_COMMENT"
 fi

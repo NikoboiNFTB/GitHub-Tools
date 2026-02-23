@@ -7,7 +7,7 @@ SCRIPT_PATH=$(readlink -f "${BASH_SOURCE[0]}")
 
 # Definitions
 SSH_DIR="$HOME/.ssh"
-KEY_FILE="$SSH_DIR/id_ed25519"
+KEY_FILE="$SSH_DIR/id_ed25519_github"
 PUB_KEY_FILE="$KEY_FILE.pub"
 
 # Helpers
