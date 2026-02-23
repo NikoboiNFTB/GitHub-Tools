@@ -11,9 +11,11 @@ PUB_KEY_FILE="$KEY_FILE.pub"
 
 echo "ℹ️  Running preflight checks..."
 
-# Check HOME
-[[ -n "$HOME" ]] || { echo "❌ HOME variable not set." >&2; exit 1; }
-echo "✅ HOME exists: $HOME"
+# Ensure $HOME exists
+if [ -z "$HOME" ]; then
+    echo "❌ HOME variable not set!";
+    exit 1;
+fi
 
 # Check required commands
 for cmd in git ssh ssh-keygen ssh-add; do

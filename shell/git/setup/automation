@@ -7,8 +7,8 @@ SCRIPT_PATH=$(readlink -f "${BASH_SOURCE[0]}")
 
 # Ensure $HOME exists
 if [ -z "$HOME" ]; then
-    echo "❌ HOME variable not set!"
-    exit 1
+    echo "❌ HOME variable not set!";
+    exit 1;
 fi
 
 # Get username from first argument or prompt
