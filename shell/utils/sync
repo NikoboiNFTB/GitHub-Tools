@@ -21,10 +21,10 @@ fi
 GITHUB_DIR="$HOME/GitHub"
 AUTHOR="NikoboiNFTB"
 AUTHOR_DIR="$GITHUB_DIR/$AUTHOR"
-GIT_REPO="$AUTHOR_DIR/GitHub-Tools/"
-PROTON_REPO="$AUTHOR_DIR/Proton-VPN/"
-GP8_REPO="$AUTHOR_DIR/Guitar-Pro-On-Linux/"
-IO_REPO="$AUTHOR_DIR/nikoboinftb.github.io/"
+GIT_REPO="$AUTHOR_DIR/GitHub-Tools"
+PROTON_REPO="$AUTHOR_DIR/Proton-VPN"
+GP8_REPO="$AUTHOR_DIR/Guitar-Pro-On-Linux"
+IO_REPO="$AUTHOR_DIR/nikoboinftb.github.io"
 
 # Copy files
 if [ "$(id -u)" -eq 0 ]; then
@@ -38,7 +38,7 @@ else
     rm -rf "$IO_REPO/shell"
 
     # Create folders
-    mkdir -p "$IO_REPO/shell/git"
+    mkdir -p "$IO_REPO/shell/git/setup"
     mkdir -p "$IO_REPO/shell/gp8"
     mkdir -p "$IO_REPO/shell/proton"
     mkdir -p "$IO_REPO/shell/utils"
