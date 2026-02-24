@@ -61,7 +61,7 @@ echo "───────────────────── ℹ️  PU
 echo
 
 # Prompt user to add the key to GitHub
-echo "1. Triple-click the key above and copy it."
+echo "1. Triple-click the key above and copy it. DO NOT HIT CTRL + C"
 echo "2. Add it to GitHub: https://github.com/settings/ssh/new"
 echo "   - Give it a Title"
 echo "   - Leave 'Key Type' as 'Authentication Key'"
