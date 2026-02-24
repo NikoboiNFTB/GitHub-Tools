@@ -2,26 +2,8 @@
 
 set -e
 
-# Determine original user (robust)
-if [ -n "$SUDO_USER" ]; then
-    # Script run via sudo
-    REAL_USER="$SUDO_USER"
-elif [ "$(id -u)" -ne 0 ]; then
-    # Non-root user
-    REAL_USER="$(whoami)"
-else
-    # Root login (including su -)
-    # Try to detect original user via parent process
-    PARENT_USER=$(ps -o user= -p $PPID)
-    if [ -n "$PARENT_USER" ] && [ "$PARENT_USER" != "root" ]; then
-        REAL_USER="$PARENT_USER"
-    else
-        echo "❌ Cannot reliably detect original user. Exiting."
-        exit 1
-    fi
-fi
-
-# Lookup home directory from /etc/passwd
+# Determine original user and HOME
+REAL_USER="$(logname 2>/dev/null || whoami)"
 REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
 [ -z "$REAL_HOME" ] && REAL_HOME="/home/$REAL_USER"
 export HOME="$REAL_HOME"
@@ -45,23 +27,21 @@ GP8_REPO="$AUTHOR_DIR/Guitar-Pro-On-Linux/"
 IO_REPO="$AUTHOR_DIR/nikoboinftb.github.io/"
 
 # Copy files
-if [ "$EUID" -eq 0 ]; then
-    # Copy to /usr/bin/
+if [ "$(id -u)" -eq 0 ]; then
+    # System-wide install for root
     cp "$GIT_REPO/shell/git/setup/automation" "/usr/bin/git-automation"
     cp "$GIT_REPO/shell/git/setup/workflow" "/usr/bin/git-workflow"
 else
-    # Copy to $io
-
-    # GitHub-Tools/git/
+    # Copy into user's home repo
     cp "$GIT_REPO/shell/git/setup/automation" "$IO_REPO/shell/git/setup/automation"
     cp "$GIT_REPO/shell/git/setup/gh" "$IO_REPO/shell/git/setup/gh"
     cp "$GIT_REPO/shell/git/setup/git" "$IO_REPO/shell/git/setup/git"
     cp "$GIT_REPO/shell/git/setup/workflow" "$IO_REPO/shell/git/setup/workflow"
 
-    # GP8/
+    # GP8
     cp "$GP8_REPO/install" "$IO_REPO/shell/gp8/install"
 
-    # Proton/
+    # Proton
     cp "$PROTON_REPO/install-icons" "$IO_REPO/shell/proton/install-icons"
     cp "$PROTON_REPO/setup" "$IO_REPO/shell/proton/setup"
 
@@ -72,4 +52,5 @@ else
     cp "$GIT_REPO/shell/utils/find-string" "$IO_REPO/shell/utils/find-string"
     cp "$GIT_REPO/shell/utils/sort" "$IO_REPO/shell/utils/sort"
     cp "$GIT_REPO/shell/utils/SORTME.txt" "$IO_REPO/shell/utils/SORTME.txt"
+    cp "$GIT_REPO/shell/utils/sync" "$IO_REPO/shell/utils/sync"
 fi
