@@ -28,7 +28,6 @@ Each entry can be clicked for a detailed description of each script.
 | [`status`](/shell/git/repo/status) | View status in one repo | [REPO.md](/docs/REPO.md#status) |
 | [`disable-ssh`](/shell/git/ssh/disable-ssh) | Disable your SSH key | [SSH.md](/docs/SSH.md#disable-ssh) |
 | [`enable-ssh`](/shell/git/ssh/enable-ssh) | Enable your SSH key | [SSH.md](/docs/SSH.md#enable-ssh) |
-| [`sort`](/shell/utils/sort) | Sort contents of any file | [UTILS.md](/docs/UTILS.md#sort) |
 | [`workflow`](/shell/git/setup/workflow) | Copy my entire personal workflow | [WORKFLOW.md](/docs/WORKFLOW.md#workflow) |
 
 ### Userscript
@@ -104,7 +103,7 @@ You can install any one of the scripts into any folder by running:
 wget https://github.nikoboi.dev/shell/*
 ```
 
->> Fill in the path to the script. [github.nikoboi.dev](github.nikoboi.dev) resolves to this repository.
+>> Fill in the path to the script. [github.nikoboi.dev](https://github.nikoboi.dev/) resolves to this repository.
 
 Or run the automation setup script. Run anywhere (the script self-corrects using `$HOME`, `mkdir -p` and `cd`):
 
