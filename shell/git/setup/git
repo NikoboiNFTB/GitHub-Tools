@@ -57,7 +57,6 @@ echo
 cat "$PUB_KEY_FILE"
 echo
 echo "───────────────────── ℹ️  PUBLIC KEY ℹ️  ─────────────────────"
-
 echo
 
 # Prompt user to add the key to GitHub
