@@ -40,7 +40,7 @@ You can install any one of the scripts into any folder by running:
 wget https://github.nikoboi.dev/shell/*
 ```
 
->> Fill in the path to the script. [github.nikoboi.dev](github.nikoboi.dev) resolves to this repository.
+>> Fill in the path to the script. [github.nikoboi.dev](https://github.nikoboi.dev/) resolves to this repository.
 
 Or run the automation setup script. Run anywhere (the script self-corrects using `$HOME`, `mkdir -p` and `cd`):
 
