@@ -14,8 +14,8 @@
 ! ========================================
 
 # Avatars
-||avatars.githubusercontent.com^$domain=github.com
-github.com##a[href^="https://avatars.githubusercontent.com/"]
+# ||avatars.githubusercontent.com^$domain=github.com
+# github.com##a[href^="https://avatars.githubusercontent.com/"]
 
 ! ========================================
 ! End of Filters
