@@ -55,17 +55,17 @@ Will clone your selected repository into `$HOME/GitHub/$AUTHOR/$REPO`
 You can install any one of the scripts into any folder by running:
 
 ```bash
-wget https://nikoboinftb.github.io/shell/*
+wget https://github.nikoboi.dev/shell/*
 ```
 
->> Fill in the path to the script
+>> Fill in the path to the script. [github.nikoboi.dev](github.nikoboi.dev) resolves to this repository.
 
 Or run the automation setup script. Run anywhere (the script self-corrects using `$HOME`, `mkdir -p` and `cd`):
 
 ```bash
-bash <(wget -qO- https://nikoboinftb.github.io/shell/git/setup/automation)
+bash <(wget -qO- https://github.nikoboi.dev/shell/setup/automation)
 ```
 
 The `automation` setup script also works as an update script.
 
->> Will setup my entire automation workflow [`/shell/git/`](https://github.com/NikoboiNFTB/nikoboinftb.github.io/tree/main/shell/git/). See [File Tree](README.md#file-tree) for details.
+>> Will setup my entire automation workflow. See the [file tree](/README.md#file-tree) for details.
