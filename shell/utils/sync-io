@@ -17,7 +17,7 @@ PROTON_REPO="$AUTHOR_DIR/Proton-VPN/"
 GP8_REPO="$AUTHOR_DIR/Guitar-Pro-On-Linux/"
 IO_REPO="$AUTHOR_DIR/nikoboinftb.github.io/"
 
-# Copy as root or user.
+# Copy
 if [ "$(id -u)" -eq 0 ]; then
     cp "$GIT_REPO/shell/git/setup/automation" "/usr/bin/git-automation"
     cp "$GIT_REPO/shell/git/setup/workflow" "/usr/bin/git-workflow"
