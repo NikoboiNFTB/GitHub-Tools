@@ -24,7 +24,7 @@ AUTHOR_DIR="$GITHUB_DIR/$AUTHOR"
 GIT_REPO="$AUTHOR_DIR/GitHub-Tools"
 PROTON_REPO="$AUTHOR_DIR/Proton-VPN"
 GP8_REPO="$AUTHOR_DIR/Guitar-Pro-On-Linux"
-IO_REPO="$AUTHOR_DIR/nikoboinftb.github.io"
+CODE_REPO="$AUTHOR_DIR/dev.nikoboi.code"
 
 # Copy files
 if [ "$(id -u)" -eq 0 ]; then
@@ -35,33 +35,33 @@ else
     # Copy into user's home repo
 
     # Remove folders
-    rm -rf "$IO_REPO/shell"
+    rm -rf "$CODE_REPO/shell"
 
     # Create folders
-    mkdir -p "$IO_REPO/shell/git/setup"
-    mkdir -p "$IO_REPO/shell/gp8"
-    mkdir -p "$IO_REPO/shell/proton"
-    mkdir -p "$IO_REPO/shell/utils"
+    mkdir -p "$CODE_REPO/git"
+    mkdir -p "$CODE_REPO/gp8"
+    mkdir -p "$CODE_REPO/proton"
+    mkdir -p "$CODE_REPO/utils"
 
     # GitHub-Tools/git/
-    cp "$GIT_REPO/shell/git/setup/automation" "$IO_REPO/shell/git/setup/automation"
-    cp "$GIT_REPO/shell/git/setup/gh" "$IO_REPO/shell/git/setup/gh"
-    cp "$GIT_REPO/shell/git/setup/git" "$IO_REPO/shell/git/setup/git"
-    cp "$GIT_REPO/shell/git/setup/workflow" "$IO_REPO/shell/git/setup/workflow"
+    cp "$GIT_REPO/shell/git/setup/automation" "$CODE_REPO/git/automation"
+    cp "$GIT_REPO/shell/git/setup/gh" "$CODE_REPO/git/gh"
+    cp "$GIT_REPO/shell/git/setup/git" "$CODE_REPO/git/git"
+    cp "$GIT_REPO/shell/git/setup/workflow" "$CODE_REPO/git/workflow"
 
     # GP8/
-    cp "$GP8_REPO/install" "$IO_REPO/shell/gp8/install"
+    cp "$GP8_REPO/install" "$CODE_REPO/gp8/install"
 
     # Proton/
-    cp "$PROTON_REPO/install-icons" "$IO_REPO/shell/proton/install-icons"
-    cp "$PROTON_REPO/setup" "$IO_REPO/shell/proton/setup"
+    cp "$PROTON_REPO/install-icons" "$CODE_REPO/proton/install-icons"
+    cp "$PROTON_REPO/setup" "$CODE_REPO/proton/setup"
 
     # GitHub-Tools/utils/
-    cp "$GIT_REPO/shell/utils/compare" "$IO_REPO/shell/utils/compare"
-    cp "$GIT_REPO/shell/utils/find-file" "$IO_REPO/shell/utils/find-file"
-    cp "$GIT_REPO/shell/utils/find-.-filter-files" "$IO_REPO/shell/utils/find-.-filter-files"
-    cp "$GIT_REPO/shell/utils/find-string" "$IO_REPO/shell/utils/find-string"
-    cp "$GIT_REPO/shell/utils/sort" "$IO_REPO/shell/utils/sort"
-    cp "$GIT_REPO/shell/utils/SORTME.txt" "$IO_REPO/shell/utils/SORTME.txt"
-    cp "$GIT_REPO/shell/utils/sync" "$IO_REPO/shell/utils/sync"
+    cp "$GIT_REPO/shell/utils/compare" "$CODE_REPO/utils/compare"
+    cp "$GIT_REPO/shell/utils/find-file" "$CODE_REPO/utils/find-file"
+    cp "$GIT_REPO/shell/utils/find-.-filter-files" "$CODE_REPO/utils/find-.-filter-files"
+    cp "$GIT_REPO/shell/utils/find-string" "$CODE_REPO/utils/find-string"
+    cp "$GIT_REPO/shell/utils/sort" "$CODE_REPO/utils/sort"
+    cp "$GIT_REPO/shell/utils/SORTME.txt" "$CODE_REPO/utils/SORTME.txt"
+    cp "$GIT_REPO/shell/utils/sync" "$CODE_REPO/utils/sync"
 fi
