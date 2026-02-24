@@ -2,9 +2,35 @@
 
 set -e
 
-# Ensure $HOME exists
-if [ -z "$HOME" ]; then
-    echo "❌ HOME variable not set!";
+# Determine the real user and home directory
+if [ "$EUID" -eq 0 ]; then
+    if [ -n "$SUDO_USER" ]; then
+        REAL_USER="$SUDO_USER"
+        REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+    elif [ -n "$LOGNAME" ]; then
+        # Likely run via 'su -' or root login
+        REAL_USER="$LOGNAME"
+        REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+        # fallback if getent fails
+        [ -z "$REAL_HOME" ] && REAL_HOME="/home/$REAL_USER"
+    else
+        echo "❌ Cannot determine the original user. Exiting."
+        exit 1
+    fi
+else
+    # Non-root user
+    REAL_USER="$(whoami)"
+    REAL_HOME="$HOME"
+fi
+
+export HOME="$REAL_HOME"
+
+echo "ℹ️  Running on behalf of: $REAL_USER"
+echo "ℹ️  HOME directory set to: $HOME"
+
+# Ensure HOME exists
+if [ -z "$HOME" ] || [ ! -d "$HOME" ]; then
+    echo "❌ HOME variable not set or directory does not exist!";
     exit 1;
 fi
 
@@ -17,21 +43,24 @@ PROTON_REPO="$AUTHOR_DIR/Proton-VPN/"
 GP8_REPO="$AUTHOR_DIR/Guitar-Pro-On-Linux/"
 IO_REPO="$AUTHOR_DIR/nikoboinftb.github.io/"
 
-# Copy
-if [ "$(id -u)" -eq 0 ]; then
+# Copy files
+if [ "$EUID" -eq 0 ]; then
+    # Copy to /usr/bin/
     cp "$GIT_REPO/shell/git/setup/automation" "/usr/bin/git-automation"
     cp "$GIT_REPO/shell/git/setup/workflow" "/usr/bin/git-workflow"
 else
+    # Copy to $io
+
     # GitHub-Tools/git/
     cp "$GIT_REPO/shell/git/setup/automation" "$IO_REPO/shell/git/setup/automation"
     cp "$GIT_REPO/shell/git/setup/gh" "$IO_REPO/shell/git/setup/gh"
     cp "$GIT_REPO/shell/git/setup/git" "$IO_REPO/shell/git/setup/git"
-    cp "$GIT_REPO/shell/git/setup/automation" "$IO_REPO/shell/git/setup/automation"
+    cp "$GIT_REPO/shell/git/setup/workflow" "$IO_REPO/shell/git/setup/workflow"
 
-    # GP8
+    # GP8/
     cp "$GP8_REPO/install" "$IO_REPO/shell/gp8/install"
 
-    # Proton
+    # Proton/
     cp "$PROTON_REPO/install-icons" "$IO_REPO/shell/proton/install-icons"
     cp "$PROTON_REPO/setup" "$IO_REPO/shell/proton/setup"
 
