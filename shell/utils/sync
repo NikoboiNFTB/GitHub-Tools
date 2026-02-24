@@ -2,27 +2,28 @@
 
 set -e
 
-# Determine the real user and home directory
-if [ "$EUID" -eq 0 ]; then
-    if [ -n "$SUDO_USER" ]; then
-        REAL_USER="$SUDO_USER"
-        REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
-    elif [ -n "$LOGNAME" ]; then
-        # Likely run via 'su -' or root login
-        REAL_USER="$LOGNAME"
-        REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
-        # fallback if getent fails
-        [ -z "$REAL_HOME" ] && REAL_HOME="/home/$REAL_USER"
-    else
-        echo "❌ Cannot determine the original user. Exiting."
-        exit 1
-    fi
-else
+# Determine original user (robust)
+if [ -n "$SUDO_USER" ]; then
+    # Script run via sudo
+    REAL_USER="$SUDO_USER"
+elif [ "$(id -u)" -ne 0 ]; then
     # Non-root user
     REAL_USER="$(whoami)"
-    REAL_HOME="$HOME"
+else
+    # Root login (including su -)
+    # Try to detect original user via parent process
+    PARENT_USER=$(ps -o user= -p $PPID)
+    if [ -n "$PARENT_USER" ] && [ "$PARENT_USER" != "root" ]; then
+        REAL_USER="$PARENT_USER"
+    else
+        echo "❌ Cannot reliably detect original user. Exiting."
+        exit 1
+    fi
 fi
 
+# Lookup home directory from /etc/passwd
+REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+[ -z "$REAL_HOME" ] && REAL_HOME="/home/$REAL_USER"
 export HOME="$REAL_HOME"
 
 echo "ℹ️  Running on behalf of: $REAL_USER"
