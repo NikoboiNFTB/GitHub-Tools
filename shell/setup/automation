@@ -68,31 +68,31 @@ echo "ℹ️  Copying files..."
 mkdir -p "$AUTHOR_DIR/auto"
 
 # repo/ → $AUTHOR_DIR
-for file in "$TOOLS_DIR/shell/git/repo/"*; do
+for file in "$TOOLS_DIR/shell/repo/"*; do
     cp "$file" "$AUTHOR_DIR/auto/" || echo "❌ Failed to copy $file"
     chmod +x "$AUTHOR_DIR/auto/$(basename "$file")"
 done
 
 # bulk/ → $AUTHOR_DIR
-for file in "$TOOLS_DIR/shell/git/bulk/"*; do
+for file in "$TOOLS_DIR/shell/bulk/"*; do
     cp "$file" "$AUTHOR_DIR/" || echo "❌ Failed to copy $file"
     chmod +x "$AUTHOR_DIR/$(basename "$file")"
 done
 
 # clone/ → $ROOT_DIR
-for file in "$TOOLS_DIR/shell/git/clone/"*; do
+for file in "$TOOLS_DIR/shell/clone/"*; do
     cp "$file" "$ROOT_DIR/" || echo "❌ Failed to copy $file"
     chmod +x "$ROOT_DIR/$(basename "$file")"
 done
 
 # ssh/ → $AUTHOR_DIR
-for file in "$TOOLS_DIR/shell/git/ssh/"*; do
+for file in "$TOOLS_DIR/shell/ssh/"*; do
     cp "$file" "$AUTHOR_DIR/" || echo "❌ Failed to copy $file"
     chmod +x "$AUTHOR_DIR/$(basename "$file")"
 done
 
 # mass/ → $ROOT_DIR
-for file in "$TOOLS_DIR/shell/git/mass/"*; do
+for file in "$TOOLS_DIR/shell/mass/"*; do
     cp "$file" "$ROOT_DIR/" || echo "❌ Failed to copy $file"
     chmod +x "$ROOT_DIR/$(basename "$file")"
 done
