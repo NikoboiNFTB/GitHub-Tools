@@ -15,6 +15,10 @@ fi
 AUTHOR="$1"
 CLONE_METHOD="$2"
 
+# Echo provided arguments
+[ -n "$AUTHOR" ] && echo "Author to clone (GitHub username): $AUTHOR"
+[ -n "$CLONE_METHOD" ] && echo "Clone method (ssh/HTTPS): $CLONE_METHOD"
+
 # Prompt if not provided
 if [ -z "$AUTHOR" ]; then
     read -rp "Author to clone (GitHub username): " AUTHOR
