@@ -26,14 +26,20 @@ if [ -z "$commit_msg" ]; then
     commit_msg="$default_msg"
 fi
 
-# Commit and push
-if git diff --cached --quiet; then
-    echo "Nothing new to commit"
+# Check for changes before committing/pushing
+if git diff --quiet && git diff --cached --quiet; then
+    echo "✅ Nothing to commit"
 else
-    git commit -m "$commit_msg"
+    if git commit -m "$commit_msg"; then
+        if git push; then
+            echo "✅ Successfully pushed"
+        else
+            echo "❌ Failed to push"
+        fi
+    else
+        echo "❌ Failed to commit"
+    fi
 fi
-
-git push
 
 # Hang
 
