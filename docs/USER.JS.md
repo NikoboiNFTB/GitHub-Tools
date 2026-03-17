@@ -1,6 +1,6 @@
 # Userscripts
 
-<Hasty README intro snippet>
+<!-- README introduction -->
 
 ## Auto-Reload if Pending Deployment
 
@@ -21,7 +21,6 @@ Automatically fills in all repo deletion steps. Because there are too many.
 **Installation**
 
 Click [here](https://github.com/NikoboiNFTB/GitHub-Tools/raw/refs/heads/main/userscript/delete-full-auto.user.js).
-
 
 ### Semi-Auto
 
