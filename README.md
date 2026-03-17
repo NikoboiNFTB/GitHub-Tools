@@ -123,7 +123,7 @@ Feel free to fork this repository and submit issues or pull requests if you have
 
 Created by **[Nikoboi](https://github.com/NikoboiNFTB/)**
 
-Script logic fined tuned using **[ChatGPT](https://chatgpt.com/)**
+Script logic fine-tuned using **[ChatGPT](https://chatgpt.com/)**
 
 ## License
 
