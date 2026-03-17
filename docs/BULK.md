@@ -72,7 +72,7 @@ Run the script from the parent directory containing your Git repos:
 
 ## Installation
 
-You can install any one of the scripts into any folder by running:
+You can grab any one of the scripts into any folder simply by running:
 
 ```bash
 wget https://github.nikoboi.dev/shell/*

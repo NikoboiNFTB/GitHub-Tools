@@ -52,7 +52,7 @@ Will clone your selected repository into `$HOME/GitHub/$AUTHOR/$REPO`
 
 ## Installation
 
-You can install any one of the scripts into any folder by running:
+You can grab any one of the scripts into any folder simply by running:
 
 ```bash
 wget https://github.nikoboi.dev/shell/*

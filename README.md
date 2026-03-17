@@ -52,6 +52,12 @@ $HOME
     │   │   │   ├── push
     │   │   │   └── status
     │   │   └── *
+    │   ├── dev.nikoboi
+    │   │   ├── auto/
+    │   │   │   ├── pull
+    │   │   │   ├── push
+    │   │   │   └── status
+    │   │   └── *
     │   ├── GitHub-Tools
     │   │   ├── auto/
     │   │   │   ├── pull
@@ -59,12 +65,6 @@ $HOME
     │   │   │   └── status
     │   │   └── *
     │   ├── IMDb-RePo
-    │   │   ├── auto/
-    │   │   │   ├── pull
-    │   │   │   ├── push
-    │   │   │   └── status
-    │   │   └── *
-    │   ├── nikoboinftb.github.io
     │   │   ├── auto/
     │   │   │   ├── pull
     │   │   │   ├── push
@@ -97,7 +97,7 @@ $HOME
 
 ## Installation
 
-You can install any one of the scripts into any folder by running:
+You can grab any one of the scripts into any folder simply by running:
 
 ```bash
 wget https://github.nikoboi.dev/shell/*

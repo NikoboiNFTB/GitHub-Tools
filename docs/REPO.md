@@ -66,7 +66,7 @@ user@pc:~/GitHub/NikoboiNFTB/GitHub-Tools/automation$ bash status
 
 ## Installation
 
-You can install any one of the scripts into any folder by running:
+You can grab any one of the scripts into any folder simply by running:
 
 ```bash
 wget https://github.nikoboi.dev/shell/*
