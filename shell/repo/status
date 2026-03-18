@@ -10,13 +10,13 @@ current_dir=$(basename "$PWD")
 
 # Determine what to add based on folder
 if [ "$current_dir" = "auto" ]; then
-	echo "Detected 'auto/' folder. Adding parent repo files..."
-	echo
-	git add ..
+    echo "Detected 'auto/' folder. Adding parent repo files..."
+    echo
+    git add ..
 else
-	echo "Adding current folder files..."
-	echo
-	git add .
+    echo "Adding current folder files..."
+    echo
+    git add .
 fi
 
 # Show status
@@ -27,19 +27,19 @@ git status
 KEEP_OPEN=true
 
 if [ "$KEEP_OPEN" = true ]; then
-	echo
-	read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
-	if [ "$response" = "disable" ]; then
-		sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
-		echo
-		echo "KEEP_OPEN set to false"
-		echo "Change 'KEEP_OPEN=true' to enable"
-		echo
-		for i in {5..1}; do
-			echo -n "Exiting in $i..."
-			sleep 1
-			echo -ne "\r"
-		done
-		echo "Exiting now.        "
-	fi
+    echo
+    read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
+    if [ "$response" = "disable" ]; then
+        sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
+        echo
+        echo "KEEP_OPEN set to false"
+        echo "Change 'KEEP_OPEN=true' to enable"
+        echo
+        for i in {5..1}; do
+            echo -n "Exiting in $i..."
+            sleep 1
+            echo -ne "\r"
+        done
+        echo "Exiting now.        "
+    fi
 fi

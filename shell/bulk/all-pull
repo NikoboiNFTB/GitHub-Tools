@@ -9,38 +9,38 @@ repos=()
 
 # Add repos
 for d in */; do
-	if [ -d "$d/.git" ]; then
-		repos+=("$d")
-	fi
+    if [ -d "$d/.git" ]; then
+        repos+=("$d")
+    fi
 done
 
 # Print that they're being pulled.
 for d in "${repos[@]}"; do
-	echo "ℹ️  Pulling $d"
+    echo "ℹ️  Pulling $d"
 done
 
 echo
 
 # Pull
 for d in "${repos[@]}"; do
-	(
-		cd "$d" || exit 1
+    (
+        cd "$d" || exit 1
 
-		set +e
-		output=$(git pull 2>&1)
-		status=$?
-		set -e
+        set +e
+        output=$(git pull 2>&1)
+        status=$?
+        set -e
 
-		if [ "$status" -eq 0 ]; then
-			if printf '%s\n' "$output" | grep -q "^Already up to date\."; then
-				echo "✅ Already up to date: $d"
-			else
-				echo "✅ Successfully pulled $d"
-			fi
-		else
-			echo "❌ Failed to pull $d"
-		fi
-	) &
+        if [ "$status" -eq 0 ]; then
+            if printf '%s\n' "$output" | grep -q "^Already up to date\."; then
+                echo "✅ Already up to date: $d"
+            else
+                echo "✅ Successfully pulled $d"
+            fi
+        else
+            echo "❌ Failed to pull $d"
+        fi
+    ) &
 done
 
 wait
@@ -50,19 +50,19 @@ wait
 KEEP_OPEN=true
 
 if [ "$KEEP_OPEN" = true ]; then
-	echo
-	read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
-	if [ "$response" = "disable" ]; then
-		sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
-		echo
-		echo "KEEP_OPEN set to false"
-		echo "Change 'KEEP_OPEN=true' to enable"
-		echo
-		for i in {5..1}; do
-			echo -n "Exiting in $i..."
-			sleep 1
-			echo -ne "\r"
-		done
-		echo "Exiting now.        "
-	fi
+    echo
+    read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
+    if [ "$response" = "disable" ]; then
+        sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
+        echo
+        echo "KEEP_OPEN set to false"
+        echo "Change 'KEEP_OPEN=true' to enable"
+        echo
+        for i in {5..1}; do
+            echo -n "Exiting in $i..."
+            sleep 1
+            echo -ne "\r"
+        done
+        echo "Exiting now.        "
+    fi
 fi

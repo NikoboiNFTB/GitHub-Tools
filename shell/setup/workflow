@@ -7,8 +7,8 @@ SCRIPT_PATH=$(readlink -f "${BASH_SOURCE[0]}")
 
 # Ensure $HOME exists
 if [ -z "$HOME" ]; then
-	echo "❌ HOME variable not set!"
-	exit 1
+    echo "❌ HOME variable not set!";
+    exit 1;
 fi
 
 # Definitions
@@ -19,17 +19,17 @@ mkdir -p "$AUTHOR_DIR"
 cd "$AUTHOR_DIR"
 
 # Ensure jq is installed
-if ! command -v jq &>/dev/null; then
-	echo "❌ Error: jq is required but not installed."
-	exit 1
+if ! command -v jq &> /dev/null; then
+    echo "❌ Error: jq is required but not installed."
+    exit 1
 fi
 
 # Get repo names
 echo "ℹ️  Fetching list of repositories for user '$AUTHOR'..."
 repos=$(curl -s "https://api.github.com/users/$AUTHOR/repos?per_page=100" | jq -r '.[].name')
 if [ -z "$repos" ]; then
-	echo "❌ No repositories found or failed to fetch from GitHub."
-	exit 1
+    echo "❌ No repositories found or failed to fetch from GitHub."
+    exit 1
 fi
 
 echo
@@ -40,11 +40,11 @@ echo
 read -p "Clone method (https/SSH): " CLONE_METHOD
 CLONE_METHOD=${CLONE_METHOD,,}
 if [ "$CLONE_METHOD" = "https" ]; then
-	CLONE_PREFIX="https://github.com/"
-	CLONE_METHOD=HTTPS
+    CLONE_PREFIX="https://github.com/"
+    CLONE_METHOD=HTTPS
 else
-	CLONE_PREFIX="git@github.com:"
-	CLONE_METHOD=SSH
+    CLONE_PREFIX="git@github.com:"
+    CLONE_METHOD=SSH
 fi
 
 # Info
@@ -52,26 +52,26 @@ echo
 echo "ℹ️  Cloning/Updating all using $CLONE_METHOD..."
 echo
 for repo in $repos; do
-	if [ -d "$repo/.git" ]; then
-		echo "ℹ️  Updating $repo..."
-	else
-		echo "ℹ️  Cloning $repo..."
-	fi
+    if [ -d "$repo/.git" ]; then
+        echo "ℹ️  Updating $repo..."
+    else
+        echo "ℹ️  Cloning $repo..."
+    fi
 done
 
 echo
 
 # Update/Clone
 for repo in $repos; do
-	(
-		if [ -d "$repo/.git" ]; then
-			cd "$repo" && git pull --quiet || echo "❌ Pulling $repo failed"
-			echo "✅ Successfully updated $repo"
-		else
-			git clone --quiet "${CLONE_PREFIX}${AUTHOR}/${repo}.git" || echo "❌ Cloning $repo failed"
-			echo "✅ Successfully cloned $repo"
-		fi
-	) &
+    (
+        if [ -d "$repo/.git" ]; then
+            cd "$repo" && git pull --quiet || echo "❌ Pulling $repo failed"
+            echo "✅ Successfully updated $repo"
+        else
+            git clone --quiet "${CLONE_PREFIX}${AUTHOR}/${repo}.git" || echo "❌ Cloning $repo failed"
+            echo "✅ Successfully cloned $repo"
+        fi
+    ) &
 done
 
 wait
@@ -85,24 +85,24 @@ echo "ℹ️  Copying files..."
 
 mkdir -p auto
 for file in "$AUTHOR_DIR/GitHub-Tools/shell/repo/"*; do
-	cp "$file" "$AUTHOR_DIR/auto/"
-	chmod +x "$AUTHOR_DIR/auto/$(basename "$file")"
+    cp "$file" "$AUTHOR_DIR/auto/"
+    chmod +x "$AUTHOR_DIR/auto/$(basename "$file")"
 done
 for file in "$AUTHOR_DIR/GitHub-Tools/shell/bulk/"*; do
-	cp "$file" "$AUTHOR_DIR/"
-	chmod +x "$AUTHOR_DIR/$(basename "$file")"
+    cp "$file" "$AUTHOR_DIR/"
+    chmod +x "$AUTHOR_DIR/$(basename "$file")"
 done
 for file in "$AUTHOR_DIR/GitHub-Tools/shell/clone/"*; do
-	cp "$file" "$ROOT_DIR/"
-	chmod +x "$ROOT_DIR/$(basename "$file")"
+    cp "$file" "$ROOT_DIR/"
+    chmod +x "$ROOT_DIR/$(basename "$file")"
 done
 for file in "$AUTHOR_DIR/GitHub-Tools/shell/ssh/"*; do
-	cp "$file" "$AUTHOR_DIR/"
-	chmod +x "$AUTHOR_DIR/$(basename "$file")"
+    cp "$file" "$AUTHOR_DIR/"
+    chmod +x "$AUTHOR_DIR/$(basename "$file")"
 done
 for file in "$AUTHOR_DIR/GitHub-Tools/shell/mass/"*; do
-	cp "$file" "$ROOT_DIR/"
-	chmod +x "$ROOT_DIR/$(basename "$file")"
+    cp "$file" "$ROOT_DIR/"
+    chmod +x "$ROOT_DIR/$(basename "$file")"
 done
 
 echo "✅ Files copied!"
@@ -116,51 +116,51 @@ all_success=true
 failed_repos=()
 
 for repo in */; do
-	[ -d "$repo/.git" ] || continue
-	EXCLUDE_FILE="$repo/.git/info/exclude"
+    [ -d "$repo/.git" ] || continue
+    EXCLUDE_FILE="$repo/.git/info/exclude"
 
-	if [ ! -f "$EXCLUDE_FILE" ]; then
-		echo "ℹ️  git exclude doesn't exist for $repo, creating it"
-		if ! mkdir -p "$repo/.git/info" || ! touch "$EXCLUDE_FILE"; then
-			all_success=false
-			failed_repos+=("$repo")
-			continue
-		fi
-	fi
+    if [ ! -f "$EXCLUDE_FILE" ]; then
+        echo "ℹ️  git exclude doesn't exist for $repo, creating it"
+        if ! mkdir -p "$repo/.git/info" || ! touch "$EXCLUDE_FILE"; then
+            all_success=false
+            failed_repos+=("$repo")
+            continue
+        fi
+    fi
 
-	for FILE_NAME in "${FILES[@]}"; do
-		if ! grep -qxF "$FILE_NAME" "$EXCLUDE_FILE"; then
-			if ! echo "$FILE_NAME" >>"$EXCLUDE_FILE"; then
-				all_success=false
-				failed_repos+=("$repo")
-				break
-			fi
-		fi
-	done
+    for FILE_NAME in "${FILES[@]}"; do
+        if ! grep -qxF "$FILE_NAME" "$EXCLUDE_FILE"; then
+            if ! echo "$FILE_NAME" >> "$EXCLUDE_FILE"; then
+                all_success=false
+                failed_repos+=("$repo")
+                break
+            fi
+        fi
+    done
 done
 
 if $all_success; then
-	echo "✅ All .git/info/exclude files updated successfully."
+    echo "✅ All .git/info/exclude files updated successfully."
 else
-	echo "❌ Failed to update .git/info/exclude in the following repositories:"
-	for repo in "${failed_repos[@]}"; do
-		echo "  - $repo"
-	done
+    echo "❌ Failed to update .git/info/exclude in the following repositories:"
+    for repo in "${failed_repos[@]}"; do
+        echo "  - $repo"
+    done
 fi
 
 # Add auto/ to repos
 for d in */; do
-	if [ "$d" != "auto/" ]; then
-		cp -r auto "$d" || echo "❌ Failed to copy auto to $d"
-	fi
+    if [ "$d" != "auto/" ]; then
+        cp -r auto "$d" || echo "❌ Failed to copy auto to $d"
+    fi
 done
 
 rm -rf auto || echo "❌ Failed to remove temporary auto folder"
 
 # Ensure all auto scripts in each repo are executable
 for d in */auto/; do
-	[ -d "$d" ] || continue
-	find "$d" -type f -exec chmod +x {} \;
+    [ -d "$d" ] || continue
+    find "$d" -type f -exec chmod +x {} \;
 done
 
 # Hide SSH scripts prompt
@@ -168,15 +168,15 @@ echo
 read -rp "Hide SSH scripts? (Y/n): " hide_ssh
 
 if [[ "$hide_ssh" =~ ^[nN]$ ]]; then
-	rm -f "$AUTHOR_DIR/.disable-ssh" "$AUTHOR_DIR/.enable-ssh"
-	echo "✅ SSH scripts not hidden."
+    rm -f "$AUTHOR_DIR/.disable-ssh" "$AUTHOR_DIR/.enable-ssh"
+    echo "✅ SSH scripts not hidden."
 else
-	mv "$AUTHOR_DIR/disable-ssh" "$AUTHOR_DIR/.disable-ssh" 2>/dev/null || true
-	mv "$AUTHOR_DIR/enable-ssh" "$AUTHOR_DIR/.enable-ssh" 2>/dev/null || true
-	echo "✅ SSH scripts hidden."
-	echo "ℹ️  They can be found at:"
-	echo "    $AUTHOR_DIR/.disable-ssh"
-	echo "    $AUTHOR_DIR/.enable-ssh"
+    mv "$AUTHOR_DIR/disable-ssh" "$AUTHOR_DIR/.disable-ssh" 2>/dev/null || true
+    mv "$AUTHOR_DIR/enable-ssh" "$AUTHOR_DIR/.enable-ssh" 2>/dev/null || true
+    echo "✅ SSH scripts hidden."
+    echo "ℹ️  They can be found at:"
+    echo "    $AUTHOR_DIR/.disable-ssh"
+    echo "    $AUTHOR_DIR/.enable-ssh"
 fi
 
 # Hang
@@ -184,19 +184,19 @@ fi
 KEEP_OPEN=true
 
 if [ "$KEEP_OPEN" = true ]; then
-	echo
-	read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
-	if [ "$response" = "disable" ]; then
-		sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
-		echo
-		echo "KEEP_OPEN set to false"
-		echo "Change 'KEEP_OPEN=true' to enable"
-		echo
-		for i in {5..1}; do
-			echo -n "Exiting in $i..."
-			sleep 1
-			echo -ne "\r"
-		done
-		echo "Exiting now.        "
-	fi
+    echo
+    read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
+    if [ "$response" = "disable" ]; then
+        sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
+        echo
+        echo "KEEP_OPEN set to false"
+        echo "Change 'KEEP_OPEN=true' to enable"
+        echo
+        for i in {5..1}; do
+            echo -n "Exiting in $i..."
+            sleep 1
+            echo -ne "\r"
+        done
+        echo "Exiting now.        "
+    fi
 fi
