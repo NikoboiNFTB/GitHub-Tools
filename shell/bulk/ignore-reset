@@ -15,18 +15,18 @@ DEFAULT_EXCLUDE="# git ls-files --others --exclude-from=.git/info/exclude
 all_replaced=true
 
 for f in */.git/info/exclude; do
-  if [[ -f "$f" ]]; then
-    echo "$DEFAULT_EXCLUDE" > "$f"
+	if [[ -f "$f" ]]; then
+		echo "$DEFAULT_EXCLUDE" >"$f"
 
-    if [[ ! -s "$f" ]]; then
-      echo "Warning: $f is empty after writing default content!"
-      all_replaced=false
-    fi
-  fi
+		if [[ ! -s "$f" ]]; then
+			echo "Warning: $f is empty after writing default content!"
+			all_replaced=false
+		fi
+	fi
 done
 
 if $all_replaced; then
-  echo "All exclude files replaced with default content successfully."
+	echo "All exclude files replaced with default content successfully."
 fi
 
 # Hang
@@ -34,19 +34,19 @@ fi
 KEEP_OPEN=true
 
 if [ "$KEEP_OPEN" = true ]; then
-    echo
-    read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
-    if [ "$response" = "disable" ]; then
-        sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
-        echo
-        echo "KEEP_OPEN set to false"
-        echo "Change 'KEEP_OPEN=true' to enable"
-        echo
-        for i in {5..1}; do
-            echo -n "Exiting in $i..."
-            sleep 1
-            echo -ne "\r"
-        done
-        echo "Exiting now.        "
-    fi
+	echo
+	read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
+	if [ "$response" = "disable" ]; then
+		sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
+		echo
+		echo "KEEP_OPEN set to false"
+		echo "Change 'KEEP_OPEN=true' to enable"
+		echo
+		for i in {5..1}; do
+			echo -n "Exiting in $i..."
+			sleep 1
+			echo -ne "\r"
+		done
+		echo "Exiting now.        "
+	fi
 fi

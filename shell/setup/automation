@@ -7,24 +7,24 @@ SCRIPT_PATH=$(readlink -f "${BASH_SOURCE[0]}")
 
 # Ensure $HOME exists
 if [ -z "$HOME" ]; then
-    echo "❌ HOME variable not set!";
-    exit 1;
+	echo "❌ HOME variable not set!"
+	exit 1
 fi
 
 # Get username from first argument or prompt
 AUTHOR="$1"
 
 if [ -z "$AUTHOR" ]; then
-    read -rp "Enter the GitHub username of the target user: " AUTHOR
+	read -rp "Enter the GitHub username of the target user: " AUTHOR
 fi
 
-AUTHOR=${AUTHOR// /}  # remove spaces just in case
+AUTHOR=${AUTHOR// /} # remove spaces just in case
 
 echo
 
 if [ -z "$AUTHOR" ]; then
-    echo "❌ No username provided. Exiting."
-    exit 1
+	echo "❌ No username provided. Exiting."
+	exit 1
 fi
 
 # Define directories
@@ -33,17 +33,17 @@ AUTHOR_DIR="$ROOT_DIR/$AUTHOR"
 
 # Check if author's GitHub folder exists
 if [ ! -d "$AUTHOR_DIR" ]; then
-    echo "❌ The folder '$AUTHOR_DIR' does not exist."
-    echo "ℹ️  Repos for '$AUTHOR' must be in '$AUTHOR_DIR'"
-    exit 1
+	echo "❌ The folder '$AUTHOR_DIR' does not exist."
+	echo "ℹ️  Repos for '$AUTHOR' must be in '$AUTHOR_DIR'"
+	exit 1
 fi
 
 cd "$AUTHOR_DIR"
 
 # Ensure jq is installed
-if ! command -v jq &> /dev/null; then
-    echo "❌ Error: jq is required but not installed."
-    exit 1
+if ! command -v jq &>/dev/null; then
+	echo "❌ Error: jq is required but not installed."
+	exit 1
 fi
 
 # Clone GitHub-Tools repo
@@ -51,11 +51,11 @@ TOOLS_DIR="$ROOT_DIR/NikoboiNFTB/GitHub-Tools"
 mkdir -p "$(dirname "$TOOLS_DIR")"
 
 if [ -d "$TOOLS_DIR/.git" ]; then
-    echo "ℹ️  Updating GitHub-Tools..."
-    cd "$TOOLS_DIR" && git pull --quiet || echo "❌ Pulling GitHub-Tools failed"
+	echo "ℹ️  Updating GitHub-Tools..."
+	cd "$TOOLS_DIR" && git pull --quiet || echo "❌ Pulling GitHub-Tools failed"
 else
-    echo "ℹ️  Cloning GitHub-Tools..."
-    git clone --quiet https://github.com/NikoboiNFTB/GitHub-Tools.git "$TOOLS_DIR" || echo "❌ Cloning GitHub-Tools failed"
+	echo "ℹ️  Cloning GitHub-Tools..."
+	git clone --quiet https://github.com/NikoboiNFTB/GitHub-Tools.git "$TOOLS_DIR" || echo "❌ Cloning GitHub-Tools failed"
 fi
 
 echo
@@ -69,32 +69,32 @@ mkdir -p "$AUTHOR_DIR/auto"
 
 # repo/ → $AUTHOR_DIR
 for file in "$TOOLS_DIR/shell/repo/"*; do
-    cp "$file" "$AUTHOR_DIR/auto/" || echo "❌ Failed to copy $file"
-    chmod +x "$AUTHOR_DIR/auto/$(basename "$file")"
+	cp "$file" "$AUTHOR_DIR/auto/" || echo "❌ Failed to copy $file"
+	chmod +x "$AUTHOR_DIR/auto/$(basename "$file")"
 done
 
 # bulk/ → $AUTHOR_DIR
 for file in "$TOOLS_DIR/shell/bulk/"*; do
-    cp "$file" "$AUTHOR_DIR/" || echo "❌ Failed to copy $file"
-    chmod +x "$AUTHOR_DIR/$(basename "$file")"
+	cp "$file" "$AUTHOR_DIR/" || echo "❌ Failed to copy $file"
+	chmod +x "$AUTHOR_DIR/$(basename "$file")"
 done
 
 # clone/ → $ROOT_DIR
 for file in "$TOOLS_DIR/shell/clone/"*; do
-    cp "$file" "$ROOT_DIR/" || echo "❌ Failed to copy $file"
-    chmod +x "$ROOT_DIR/$(basename "$file")"
+	cp "$file" "$ROOT_DIR/" || echo "❌ Failed to copy $file"
+	chmod +x "$ROOT_DIR/$(basename "$file")"
 done
 
 # ssh/ → $AUTHOR_DIR
 for file in "$TOOLS_DIR/shell/ssh/"*; do
-    cp "$file" "$AUTHOR_DIR/" || echo "❌ Failed to copy $file"
-    chmod +x "$AUTHOR_DIR/$(basename "$file")"
+	cp "$file" "$AUTHOR_DIR/" || echo "❌ Failed to copy $file"
+	chmod +x "$AUTHOR_DIR/$(basename "$file")"
 done
 
 # mass/ → $ROOT_DIR
 for file in "$TOOLS_DIR/shell/mass/"*; do
-    cp "$file" "$ROOT_DIR/" || echo "❌ Failed to copy $file"
-    chmod +x "$ROOT_DIR/$(basename "$file")"
+	cp "$file" "$ROOT_DIR/" || echo "❌ Failed to copy $file"
+	chmod +x "$ROOT_DIR/$(basename "$file")"
 done
 
 echo "✅ Files copied!"
@@ -103,16 +103,16 @@ echo "✅ Files copied!"
 FILES=(/auto/pull /auto/push /auto/status)
 
 for d in */; do
-    [ "$d" = "auto/" ] && continue
-    repo_git="$d/.git/info/exclude"
-    if [ -f "$repo_git" ]; then
-        for FILE_NAME in "${FILES[@]}"; do
-            if ! grep -qxF "$FILE_NAME" "$repo_git"; then
-                echo "$FILE_NAME" >> "$repo_git"
-            fi
-        done
-    fi
-    cp -r auto "$d" 2>/dev/null || echo "❌ Failed to copy auto to $d"
+	[ "$d" = "auto/" ] && continue
+	repo_git="$d/.git/info/exclude"
+	if [ -f "$repo_git" ]; then
+		for FILE_NAME in "${FILES[@]}"; do
+			if ! grep -qxF "$FILE_NAME" "$repo_git"; then
+				echo "$FILE_NAME" >>"$repo_git"
+			fi
+		done
+	fi
+	cp -r auto "$d" 2>/dev/null || echo "❌ Failed to copy auto to $d"
 done
 
 rm -rf auto 2>/dev/null
@@ -122,15 +122,15 @@ echo
 read -rp "Hide SSH scripts? (Y/n): " hide_ssh
 
 if [[ "$hide_ssh" =~ ^[nN]$ ]]; then
-    rm -f "$AUTHOR_DIR/.disable-ssh" "$AUTHOR_DIR/.enable-ssh"
-    echo "✅ SSH scripts not hidden."
+	rm -f "$AUTHOR_DIR/.disable-ssh" "$AUTHOR_DIR/.enable-ssh"
+	echo "✅ SSH scripts not hidden."
 else
-    mv "$AUTHOR_DIR/disable-ssh" "$AUTHOR_DIR/.disable-ssh" 2>/dev/null || true
-    mv "$AUTHOR_DIR/enable-ssh" "$AUTHOR_DIR/.enable-ssh" 2>/dev/null || true
-    echo "✅ SSH scripts hidden."
-    echo "ℹ️  They can be found at:"
-    echo "    $AUTHOR_DIR/.disable-ssh"
-    echo "    $AUTHOR_DIR/.enable-ssh"
+	mv "$AUTHOR_DIR/disable-ssh" "$AUTHOR_DIR/.disable-ssh" 2>/dev/null || true
+	mv "$AUTHOR_DIR/enable-ssh" "$AUTHOR_DIR/.enable-ssh" 2>/dev/null || true
+	echo "✅ SSH scripts hidden."
+	echo "ℹ️  They can be found at:"
+	echo "    $AUTHOR_DIR/.disable-ssh"
+	echo "    $AUTHOR_DIR/.enable-ssh"
 fi
 
 # Hang
@@ -138,19 +138,19 @@ fi
 KEEP_OPEN=true
 
 if [ "$KEEP_OPEN" = true ]; then
-    echo
-    read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
-    if [ "$response" = "disable" ]; then
-        sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
-        echo
-        echo "KEEP_OPEN set to false"
-        echo "Change 'KEEP_OPEN=true' to enable"
-        echo
-        for i in {5..1}; do
-            echo -n "Exiting in $i..."
-            sleep 1
-            echo -ne "\r"
-        done
-        echo "Exiting now.        "
-    fi
+	echo
+	read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
+	if [ "$response" = "disable" ]; then
+		sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
+		echo
+		echo "KEEP_OPEN set to false"
+		echo "Change 'KEEP_OPEN=true' to enable"
+		echo
+		for i in {5..1}; do
+			echo -n "Exiting in $i..."
+			sleep 1
+			echo -ne "\r"
+		done
+		echo "Exiting now.        "
+	fi
 fi

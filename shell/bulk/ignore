@@ -6,31 +6,31 @@ set -e
 SCRIPT_PATH=$(readlink -f "${BASH_SOURCE[0]}")
 
 if [[ $# -eq 0 ]]; then
-  read -rp 'Enter file or directory name(s): ' INPUT
-  read -r -a FILES <<< "$INPUT"
+	read -rp 'Enter file or directory name(s): ' INPUT
+	read -r -a FILES <<<"$INPUT"
 else
-  FILES=("$@")
+	FILES=("$@")
 fi
 
 if [[ ${#FILES[@]} -eq 0 ]]; then
-  echo "Error: no input provided" >&2
-  exit 1
+	echo "Error: no input provided" >&2
+	exit 1
 fi
 
 added=false
 
 for FILE_NAME in "${FILES[@]}"; do
-  for f in */.git/info/exclude; do
-    if ! grep -qxF "$FILE_NAME" "$f"; then
-      echo "$FILE_NAME" >> "$f"
-      echo "Added '$FILE_NAME' to $f"
-      added=true
-    fi
-  done
+	for f in */.git/info/exclude; do
+		if ! grep -qxF "$FILE_NAME" "$f"; then
+			echo "$FILE_NAME" >>"$f"
+			echo "Added '$FILE_NAME' to $f"
+			added=true
+		fi
+	done
 done
 
 if ! $added; then
-  echo "Nothing changed; all files were already present"
+	echo "Nothing changed; all files were already present"
 fi
 
 # Hang
@@ -38,19 +38,19 @@ fi
 KEEP_OPEN=true
 
 if [ "$KEEP_OPEN" = true ]; then
-    echo
-    read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
-    if [ "$response" = "disable" ]; then
-        sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
-        echo
-        echo "KEEP_OPEN set to false"
-        echo "Change 'KEEP_OPEN=true' to enable"
-        echo
-        for i in {5..1}; do
-            echo -n "Exiting in $i..."
-            sleep 1
-            echo -ne "\r"
-        done
-        echo "Exiting now.        "
-    fi
+	echo
+	read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
+	if [ "$response" = "disable" ]; then
+		sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
+		echo
+		echo "KEEP_OPEN set to false"
+		echo "Change 'KEEP_OPEN=true' to enable"
+		echo
+		for i in {5..1}; do
+			echo -n "Exiting in $i..."
+			sleep 1
+			echo -ne "\r"
+		done
+		echo "Exiting now.        "
+	fi
 fi

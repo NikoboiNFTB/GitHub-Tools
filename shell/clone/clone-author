@@ -7,8 +7,8 @@ SCRIPT_PATH=$(readlink -f "${BASH_SOURCE[0]}")
 
 # Ensure $HOME exists
 if [ -z "$HOME" ]; then
-    echo "❌ HOME variable not set!";
-    exit 1;
+	echo "❌ HOME variable not set!"
+	exit 1
 fi
 
 # Parse arguments
@@ -21,22 +21,22 @@ CLONE_METHOD="$2"
 
 # Prompt if not provided
 if [ -z "$AUTHOR" ]; then
-    read -rp "Author to clone (GitHub username): " AUTHOR
+	read -rp "Author to clone (GitHub username): " AUTHOR
 fi
 
 if [ -z "$CLONE_METHOD" ]; then
-    read -rp "Clone method (ssh/HTTPS): " CLONE_METHOD
+	read -rp "Clone method (ssh/HTTPS): " CLONE_METHOD
 fi
 
 CLONE_METHOD=${CLONE_METHOD,,}
 
 # Set clone prefix
 if [ "$CLONE_METHOD" = "ssh" ]; then
-    CLONE_PREFIX="git@github.com:"
-    CLONE_METHOD=SSH
+	CLONE_PREFIX="git@github.com:"
+	CLONE_METHOD=SSH
 else
-    CLONE_PREFIX="https://github.com/"
-    CLONE_METHOD=HTTPS
+	CLONE_PREFIX="https://github.com/"
+	CLONE_METHOD=HTTPS
 fi
 
 # Setup target directory
@@ -46,9 +46,9 @@ mkdir -p "$AUTHOR_DIR"
 cd "$AUTHOR_DIR"
 
 # Ensure jq is installed
-if ! command -v jq &> /dev/null; then
-    echo "Error: jq is required but not installed."
-    exit 1
+if ! command -v jq &>/dev/null; then
+	echo "Error: jq is required but not installed."
+	exit 1
 fi
 
 echo
@@ -58,8 +58,8 @@ echo "ℹ️  Fetching list of repositories for user '$AUTHOR'..."
 repos=$(curl -s "https://api.github.com/users/$AUTHOR/repos?per_page=100" | jq -r '.[].name')
 
 if [ -z "$repos" ]; then
-    echo "No repositories found or failed to fetch from GitHub."
-    exit 1
+	echo "No repositories found or failed to fetch from GitHub."
+	exit 1
 fi
 
 echo
@@ -72,45 +72,45 @@ to_update=()
 to_clone=()
 
 for repo in $repos; do
-    if [ -d "$repo/.git" ]; then
-        to_update+=("$repo")
-    else
-        to_clone+=("$repo")
-    fi
+	if [ -d "$repo/.git" ]; then
+		to_update+=("$repo")
+	else
+		to_clone+=("$repo")
+	fi
 done
 
 # Announcements
 for repo in "${to_update[@]}"; do
-    echo "ℹ️  Updating $repo"
+	echo "ℹ️  Updating $repo"
 done
 
 for repo in "${to_clone[@]}"; do
-    echo "ℹ️  Cloning $repo"
+	echo "ℹ️  Cloning $repo"
 done
 
 echo
 
 # Execute
 for repo in "${to_update[@]}"; do
-    (
-        cd "$repo" || exit 1
+	(
+		cd "$repo" || exit 1
 
-        if git pull --quiet; then
-            echo "✅ Successfully updated $repo"
-        else
-            echo "❌ Failed to update $repo"
-        fi
-    ) &
+		if git pull --quiet; then
+			echo "✅ Successfully updated $repo"
+		else
+			echo "❌ Failed to update $repo"
+		fi
+	) &
 done
 
 for repo in "${to_clone[@]}"; do
-    (
-        if git clone --quiet "${CLONE_PREFIX}${AUTHOR}/${repo}.git"; then
-            echo "✅ Successfully cloned $repo"
-        else
-            echo "❌ Failed to clone $repo"
-        fi
-    ) &
+	(
+		if git clone --quiet "${CLONE_PREFIX}${AUTHOR}/${repo}.git"; then
+			echo "✅ Successfully cloned $repo"
+		else
+			echo "❌ Failed to clone $repo"
+		fi
+	) &
 done
 
 wait
@@ -123,19 +123,19 @@ echo "✅ All clone/update tasks completed!"
 KEEP_OPEN=true
 
 if [ "$KEEP_OPEN" = true ]; then
-    echo
-    read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
-    if [ "$response" = "disable" ]; then
-        sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
-        echo
-        echo "KEEP_OPEN set to false"
-        echo "Change 'KEEP_OPEN=true' to enable"
-        echo
-        for i in {5..1}; do
-            echo -n "Exiting in $i..."
-            sleep 1
-            echo -ne "\r"
-        done
-        echo "Exiting now.        "
-    fi
+	echo
+	read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
+	if [ "$response" = "disable" ]; then
+		sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
+		echo
+		echo "KEEP_OPEN set to false"
+		echo "Change 'KEEP_OPEN=true' to enable"
+		echo
+		for i in {5..1}; do
+			echo -n "Exiting in $i..."
+			sleep 1
+			echo -ne "\r"
+		done
+		echo "Exiting now.        "
+	fi
 fi
