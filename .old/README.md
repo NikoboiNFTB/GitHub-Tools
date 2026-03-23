@@ -205,4 +205,4 @@ Script logic fined tuned using **ChatGPT**
 
 ## License
 
-This project is licenced under the GNU General Public License V3. See [LICENSE](LICENSE) for details.
+This project is licenced under the GNU General Public License V3. See [LICENSE](/LICENSE) for details.
