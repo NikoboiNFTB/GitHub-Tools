@@ -179,6 +179,27 @@ else
     echo "    $AUTHOR_DIR/.enable-ssh"
 fi
 
+# Copy scripts to `/usr/local/bin/` prompt
+echo
+echo "┌────────────────────────────────INFO────────────────────────────────┐"
+echo
+echo "cd ~/GitHub/NikoboiNFTB"
+echo
+echo "'sudo -s' or 'su' depending on your system."
+echo "  The point is: be in my GitHub author folder as root."
+echo
+echo "Then:"
+echo
+echo "cp GitHub-Tools/shell/setup/automation /usr/local/bin/git-automation"
+echo "cp GitHub-Tools/shell/setup/workflow /usr/local/bin/git-workflow"
+echo "cp Shell-Scripts/utils/better-mv /usr/local/bin/bmv"
+echo "cp Shell-Scripts/utils/cat-dir /usr/local/bin/cat-dir"
+echo "cp Shell-Scripts/utils/find-file /usr/local/bin/find-file"
+echo "cp Shell-Scripts/utils/find-string /usr/local/bin/find-string"
+echo "cp Shell-Scripts/utils/repeat /usr/local/bin/repeat"
+echo
+echo "└────────────────────────────────INFO────────────────────────────────┘"
+
 # Hang
 
 KEEP_OPEN=true
