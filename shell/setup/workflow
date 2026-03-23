@@ -192,6 +192,7 @@ echo "Then:"
 echo
 echo "cp GitHub-Tools/shell/setup/automation /usr/local/bin/git-automation"
 echo "cp GitHub-Tools/shell/setup/workflow /usr/local/bin/git-workflow"
+echo "cp Shell-Scripts/utils/better-cd /usr/local/bin/bcd"
 echo "cp Shell-Scripts/utils/better-mv /usr/local/bin/bmv"
 echo "cp Shell-Scripts/utils/cat-dir /usr/local/bin/cat-dir"
 echo "cp Shell-Scripts/utils/find-file /usr/local/bin/find-file"
