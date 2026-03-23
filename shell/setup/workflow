@@ -181,7 +181,6 @@ fi
 
 # Copy scripts to `/usr/local/bin/` info
 echo "
-
 ┌────────────────────────────────INFO────────────────────────────────┐
 
 To copy all scripts to '/usr/local/bin/', run:
@@ -189,7 +188,15 @@ To copy all scripts to '/usr/local/bin/', run:
 # 'cd' first.
 cd ~/GitHub/NikoboiNFTB
 
-Then run 'sudo -s' or 'su' depending on your system.
+Then run;
+
+sudo -s
+
+or
+
+su
+
+depending on your system.
 
 > The point is; be in my GitHub author folder as root.
 
