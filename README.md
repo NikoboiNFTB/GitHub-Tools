@@ -113,7 +113,7 @@ bash <(wget -qO- https://github.nikoboi.dev/shell/setup/automation)
 
 The `automation` setup script also works as an update script.
 
-> > Will setup my entire automation workflow. See the [file tree](/README.md#file-tree) for details.
+> > Will setup my entire automation workflow. See the [file tree](#file-tree) for details.
 
 ## Contributing
 
