@@ -40,7 +40,7 @@ Each entry can be clicked for a detailed description of each script.
 
 ## File Tree
 
-This is the expected file structure for every single script I've published.
+This is the expected file structure for every script in this repo.
 
 ```text
 $HOME
