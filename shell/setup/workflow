@@ -205,6 +205,7 @@ Then:
 install -m 755 GitHub-Tools/shell/setup/automation /usr/local/bin/git-automation
 install -m 755 GitHub-Tools/shell/setup/workflow /usr/local/bin/git-workflow
 install -m 755 Shell-Scripts/utils/better-cd /usr/local/bin/bcd
+install -m 755 Shell-Scripts/utils/better-cp /usr/local/bin/bcp
 install -m 755 Shell-Scripts/utils/better-mv /usr/local/bin/bmv
 install -m 755 Shell-Scripts/utils/cat-dir /usr/local/bin/cat-dir
 install -m 755 Shell-Scripts/utils/find-file /usr/local/bin/find-file
