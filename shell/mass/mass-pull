@@ -9,42 +9,42 @@ repos=()
 
 # Add repos
 for author in */; do
-    [ -d "$author" ] || continue
-    for repo in "$author"*/; do
-        if [ -d "$repo/.git" ]; then
-            repos+=("$repo")
-        fi
-    done
+	[ -d "$author" ] || continue
+	for repo in "$author"*/; do
+		if [ -d "$repo/.git" ]; then
+			repos+=("$repo")
+		fi
+	done
 done
 
 # Print that they're being pulled.
 for repo in "${repos[@]}"; do
-    echo "ℹ️  Pulling $repo"
+	echo "ℹ️  Pulling $repo"
 done
 
 echo
 
 # Pull
 for repo in "${repos[@]}"; do
-    (
-        cd "$repo" || exit 1
+	(
+		cd "$repo" || exit 1
 
-        set +e
-        output=$(git pull 2>&1)
-        status=$?
-        set -e
+		set +e
+		output=$(git pull 2>&1)
+		status=$?
+		set -e
 
-        if [ "$status" -eq 0 ]; then
-            if printf '%s\n' "$output" | grep -q "^Already up to date\."; then
-                echo "✅ Already up to date: $repo"
-            else
-                echo "✅ Successfully pulled $repo"
-            fi
-        else
-            echo "❌ Failed to pull $repo"
-            printf '%s\n' "$output"
-        fi
-    ) &
+		if [ "$status" -eq 0 ]; then
+			if printf '%s\n' "$output" | grep -q "^Already up to date\."; then
+				echo "✅ Already up to date: $repo"
+			else
+				echo "✅ Successfully pulled $repo"
+			fi
+		else
+			echo "❌ Failed to pull $repo"
+			printf '%s\n' "$output"
+		fi
+	) &
 done
 
 wait
@@ -54,19 +54,19 @@ wait
 KEEP_OPEN=true
 
 if [ "$KEEP_OPEN" = true ]; then
-    echo
-    read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
-    if [ "$response" = "disable" ]; then
-        sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
-        echo
-        echo "KEEP_OPEN set to false"
-        echo "Change 'KEEP_OPEN=true' to enable"
-        echo
-        for i in {5..1}; do
-            echo -n "Exiting in $i..."
-            sleep 1
-            echo -ne "\r"
-        done
-        echo "Exiting now.        "
-    fi
+	echo
+	read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
+	if [ "$response" = "disable" ]; then
+		sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
+		echo
+		echo "KEEP_OPEN set to false"
+		echo "Change 'KEEP_OPEN=true' to enable"
+		echo
+		for i in {5..1}; do
+			echo -n "Exiting in $i..."
+			sleep 1
+			echo -ne "\r"
+		done
+		echo "Exiting now.        "
+	fi
 fi

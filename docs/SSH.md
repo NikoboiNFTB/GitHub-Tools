@@ -36,7 +36,7 @@ You can grab any one of the scripts into any folder simply by running:
 wget https://github.nikoboi.dev/shell/*
 ```
 
->> Fill in the path to the script. [github.nikoboi.dev](https://github.nikoboi.dev/) resolves to this repository.
+> > Fill in the path to the script. [github.nikoboi.dev](https://github.nikoboi.dev/) resolves to this repository.
 
 Or run the automation setup script. Run anywhere (the script self-corrects using `$HOME`, `mkdir -p` and `cd`):
 
@@ -46,4 +46,4 @@ bash <(wget -qO- https://github.nikoboi.dev/shell/setup/automation)
 
 The `automation` setup script also works as an update script.
 
->> Will setup my entire automation workflow. See the [file tree](/README.md#file-tree) for details.
+> > Will setup my entire automation workflow. See the [file tree](/README.md#file-tree) for details.

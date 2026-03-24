@@ -10,11 +10,11 @@ current_dir=$(basename "$PWD")
 
 # Determine what to add based on folder
 if [ "$current_dir" = "auto" ]; then
-    echo "Detected 'auto/' folder. Adding parent repo files..."
-    git add ..
+	echo "Detected 'auto/' folder. Adding parent repo files..."
+	git add ..
 else
-    echo "Adding current folder files..."
-    git add .
+	echo "Adding current folder files..."
+	git add .
 fi
 
 # Ask for commit message, use default if empty.
@@ -23,22 +23,22 @@ default_msg="Update"
 read -rp "Enter commit message (Enter to use '$default_msg'): " commit_msg
 
 if [ -z "$commit_msg" ]; then
-    commit_msg="$default_msg"
+	commit_msg="$default_msg"
 fi
 
 # Check for changes before committing/pushing
 if git diff --quiet && git diff --cached --quiet; then
-    echo "✅ Nothing to commit"
+	echo "✅ Nothing to commit"
 else
-    if git commit -m "$commit_msg"; then
-        if git push; then
-            echo "✅ Successfully pushed"
-        else
-            echo "❌ Failed to push"
-        fi
-    else
-        echo "❌ Failed to commit"
-    fi
+	if git commit -m "$commit_msg"; then
+		if git push; then
+			echo "✅ Successfully pushed"
+		else
+			echo "❌ Failed to push"
+		fi
+	else
+		echo "❌ Failed to commit"
+	fi
 fi
 
 # Hang
@@ -46,19 +46,19 @@ fi
 KEEP_OPEN=true
 
 if [ "$KEEP_OPEN" = true ]; then
-    echo
-    read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
-    if [ "$response" = "disable" ]; then
-        sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
-        echo
-        echo "KEEP_OPEN set to false"
-        echo "Change 'KEEP_OPEN=true' to enable"
-        echo
-        for i in {5..1}; do
-            echo -n "Exiting in $i..."
-            sleep 1
-            echo -ne "\r"
-        done
-        echo "Exiting now.        "
-    fi
+	echo
+	read -p "Press 'Enter' to exit / Type 'disable' to disable hanging (local only): " response
+	if [ "$response" = "disable" ]; then
+		sed -i 's/^KEEP_OPEN=true/KEEP_OPEN=false/' "$SCRIPT_PATH"
+		echo
+		echo "KEEP_OPEN set to false"
+		echo "Change 'KEEP_OPEN=true' to enable"
+		echo
+		for i in {5..1}; do
+			echo -n "Exiting in $i..."
+			sleep 1
+			echo -ne "\r"
+		done
+		echo "Exiting now.        "
+	fi
 fi
