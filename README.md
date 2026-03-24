@@ -1,4 +1,5 @@
-⚠️ Warning: Several of the SSH related tools (including setting up and using) may be broken right now.
+> [!WARNING]
+> Several of the SSH related tools (including setting up and using) may be broken right now.
 
 # GitHub-Tools
 
