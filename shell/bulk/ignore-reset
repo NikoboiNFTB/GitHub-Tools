@@ -31,7 +31,7 @@ fi
 
 # Hang
 
-KEEP_OPEN=true
+KEEP_OPEN=false
 
 if [ "$KEEP_OPEN" = true ]; then
 	echo
