@@ -213,7 +213,7 @@ install -m 755 Shell-Scripts/utils/find-string /usr/local/bin/find-string
 install -m 755 Shell-Scripts/utils/repeat /usr/local/bin/repeat
 
 Run as user:
-echo "alias bcd='source /usr/local/bin/bcd'" >> ~/.bash_aliases
+echo \"alias bcd='source /usr/local/bin/bcd'\" >> ~/.bash_aliases
 
 └────────────────────────────────INFO────────────────────────────────┘
 "
