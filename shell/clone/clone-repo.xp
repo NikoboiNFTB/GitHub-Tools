@@ -59,15 +59,16 @@ echo
 # Build repo directory and clone
 REPO_DIR="$HOME/GitHub/$AUTHOR/$REPO"
 if [ -d "$REPO_DIR" ]; then
-	echo -e "⚠️  Repo folder exists. Aborting..."
-	echo -e "ℹ️  Move or delete the folder '$REPO_DIR'"
+	echo "⚠️  Repo folder exists. Aborting..."
+	echo "ℹ️  Move or delete the folder '$REPO_DIR'"
 	exit 1
 else
 	mkdir -p "$REPO_DIR"
-	echo -e "================ ℹ️  Git progress ℹ️  ================"
+	echo "================ ℹ️  Git progress ℹ️  ================"
 	git clone "$CLONE_URL" "$REPO_DIR/"
-	echo -e "================ ℹ️  Git progress ℹ️  ================"
+	echo "================ ℹ️  Git progress ℹ️  ================"
 	echo
-	echo -e "✅ Successfully cloned '$AUTHOR/$REPO'"
-	echo -e "ℹ️  Repo directory can be found at '$REPO_DIR'"
+	echo "✅ Successfully cloned '$AUTHOR/$REPO'"
+	echo "ℹ️  Repo directory can be found at:"
+	echo "   $REPO_DIR"
 fi
