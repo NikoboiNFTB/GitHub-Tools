@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -e
+
+find . -name ".git" -type d | while read -r git_dir; do
+	repo_dir=$(dirname "$git_dir")
+	echo
+	echo "================ ℹ️  Pulling $repo_dir ℹ️  ================"
+	git -C $repo_dir pull
+	echo "================ ℹ️  Pulled $repo_dir ℹ️  ================"
+	echo
+done
