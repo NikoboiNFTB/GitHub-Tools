@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+set -e
+
+echo "
+ℹ️  This script is just made to disable SSH and move the key to a not-so-obvious location.
+   This is not real security.
+   You can modify the SSH key backup directory by modifying the SSH_KEY_BAK variable.
+"
+
+# Ensure $HOME exists
+if [ -z "$HOME" ]; then
+	echo "❌ HOME variable not set!"
+	exit 1
+fi
+
+# Definitions
+SSH_DIR="$HOME/.ssh"
+SSH_DIR_BAK="$HOME/.ssh.bak"
+SSH_KEY="id_ed25519_github"
+
+disable_ssh() {
+	echo "ℹ️  Disabling SSH..."
+
+	mkdir -p "$SSH_DIR_BAK"
+	mv -f "$SSH_DIR/$SSH_KEY" "$SSH_DIR_BAK/$SSH_KEY"
+	mv -f "$SSH_DIR/$SSH_KEY.pub" "$SSH_DIR_BAK/$SSH_KEY.pub"
+
+	ssh-add -d "$SSH_DIR_BAK/$SSH_KEY" 2>/dev/null || echo "❌ Key not loaded in ssh-agent"
+
+	echo "✅ SSH disabled."
+}
+
+enable_ssh() {
+	echo "ℹ️  Enabling SSH..."
+
+	mkdir -p "$SSH_DIR"
+	mv -f "$SSH_DIR_BAK/$SSH_KEY" "$SSH_DIR/"
+	mv -f "$SSH_DIR_BAK/$SSH_KEY.pub" "$SSH_DIR/"
+
+	chmod 600 "$SSH_DIR/$SSH_KEY" 2>/dev/null || true
+	chmod 644 "$SSH_DIR/$SSH_KEY.pub" 2>/dev/null || true
+
+	ssh-add "$SSH_DIR/$SSH_KEY" || echo "❌ 'ssh-agent' not running"
+
+	echo "✅ SSH enabled."
+}
+
+# Check private and public keys
+if [ -f "$SSH_DIR/$SSH_KEY" ] && [ -f "$SSH_DIR/$SSH_KEY.pub" ]; then
+	disable_ssh
+elif [ -f "$SSH_DIR_BAK/$SSH_KEY" ] && [ -f "$SSH_DIR_BAK/$SSH_KEY.pub" ]; then
+	enable_ssh
+else
+	echo "❌ Failed to find both private and public SSH keys in '$SSH_DIR' or '$SSH_DIR_BAK'"
+	exit 1
+fi
