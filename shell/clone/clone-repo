@@ -11,59 +11,71 @@ if [ -z "$HOME" ]; then
 	exit 1
 fi
 
-# Parse arguments
-AUTHOR="$1"
-REPO="$2"
-CLONE_METHOD="$3"
-
-# Echo provided arguments
-[ -n "$AUTHOR" ] && echo "Author to clone (GitHub username): $AUTHOR"
-[ -n "$REPO" ] && echo "Repository to clone (Repository name): $REPO"
-[ -n "$CLONE_METHOD" ] && echo "Clone method (ssh/HTTPS): $CLONE_METHOD"
-
-# Prompt if not provided
-if [ -z "$AUTHOR" ]; then
-	read -rp "Author to clone (GitHub username): " AUTHOR
+# Convert arguments to operations
+if [ "$#" -gt 3 ]; then
+	echo "ℹ️  Usage:"
+	echo "  $0 [Author] [Repository] [SSH/HTTPS]"
+	echo "     All optional, but must be in this order."
+	exit 1
 fi
 
-if [ -z "$REPO" ]; then
-	read -rp "Repository to clone (Repository name): " REPO
-fi
+echo "ℹ️  Your inputs:"
 
-if [ -z "$CLONE_METHOD" ]; then
-	read -rp "Clone method (ssh/HTTPS): " CLONE_METHOD
-fi
+case "$#" in
+3)
+	AUTHOR="$1"
+	echo "   Author: $AUTHOR"
+	REPO="$2"
+	echo "   Repository: $REPO"
+	METHOD="$3"
+	echo "   Method (ssh/HTTPS): $METHOD"
+	;;
+2)
+	AUTHOR="$1"
+	echo "   Author: $AUTHOR"
+	REPO="$2"
+	echo "   Repository: $REPO"
+	read -rp "   Method (ssh/HTTPS): " METHOD
+	;;
+1)
+	AUTHOR="$1"
+	echo "   Author: $AUTHOR"
+	read -rp "   Repository: " REPO
+	read -rp "   Method (ssh/HTTPS): " METHOD
+	;;
+0)
+	read -rp "   Author: " AUTHOR
+	read -rp "   Repository: " REPO
+	read -rp "   Method (ssh/HTTPS): " METHOD
+	;;
+esac
 
+METHOD="${METHOD,,}"
+if [ "$METHOD" = "ssh" ]; then
+	METHOD="SSH"
+	CLONE_URL="git@github.com:$AUTHOR/$REPO.git"
+else
+	METHOD="HTTPS"
+	CLONE_URL="https://github.com/$AUTHOR/$REPO.git"
+fi
 echo
 
-CLONE_METHOD=${CLONE_METHOD,,}
-
-# Set clone prefix
-if [ "$CLONE_METHOD" = "ssh" ]; then
-	CLONE_PREFIX="git@github.com:"
-	CLONE_METHOD=SSH
+# Build repo directory and clone
+REPO_DIR="$HOME/GitHub/$AUTHOR/$REPO"
+if [ -e "$REPO_DIR" ]; then
+	echo "⚠️  Repo folder exists. Aborting..."
+	echo "ℹ️  Move or delete:"
+	echo "   $REPO_DIR"
+	exit 1
 else
-	CLONE_PREFIX="https://github.com/"
-	CLONE_METHOD=HTTPS
+	echo "================ ℹ️  Git progress ℹ️  ================"
+	git clone "$CLONE_URL" "$REPO_DIR/"
+	echo "================ ℹ️  Git progress ℹ️  ================"
+	echo
+	echo "✅ Successfully cloned '$AUTHOR/$REPO'"
+	echo "ℹ️  Repo directory can be found at:"
+	echo "   $REPO_DIR"
 fi
-
-# Setup target directory
-ROOT_DIR="$HOME/GitHub"
-AUTHOR_DIR="$ROOT_DIR/$AUTHOR"
-mkdir -p "$AUTHOR_DIR"
-cd "$AUTHOR_DIR"
-
-# Clone or update the repo
-if [ -d "$REPO/.git" ]; then
-	echo "ℹ️  Updating $REPO using $CLONE_METHOD..."
-	cd "$REPO" && git pull --quiet || echo "❌ Pulling $REPO failed"
-else
-	echo "ℹ️  Cloning $REPO using $CLONE_METHOD..."
-	git clone --quiet "${CLONE_PREFIX}${AUTHOR}/${REPO}.git" || echo "❌ Cloning $REPO failed"
-fi
-
-echo
-echo "✅ Clone/update task completed!"
 
 # Hang
 

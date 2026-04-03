@@ -188,20 +188,14 @@ To copy all scripts to '/usr/local/bin/', run:
 # 'cd' first.
 cd ~/GitHub/NikoboiNFTB
 
-Then run;
-
-sudo -s
-
-or
-
-su
-
-depending on your system.
+Then run 'sudo -s' or 'su' depending on your system.
 
 > The point is; be in my GitHub author folder as root.
 
 Then:
 
+install -m 755 GitHub-Tools/shell/clone/clone-author /usr/local/bin/clone-author
+install -m 755 GitHub-Tools/shell/clone/clone-repo /usr/local/bin/clone-repo
 install -m 755 GitHub-Tools/shell/setup/automation /usr/local/bin/git-automation
 install -m 755 GitHub-Tools/shell/setup/workflow /usr/local/bin/git-workflow
 install -m 755 Shell-Scripts/utils/better-cd /usr/local/bin/bcd
