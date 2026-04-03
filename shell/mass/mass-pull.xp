@@ -2,11 +2,12 @@
 
 set -e
 
-find . -name ".git" -type d | while read -r git_dir; do
-	repo_dir=$(dirname "$git_dir")
+find . -name ".git" -type d | sort | while read -r git_dir; do
+	repo_path=$(dirname "$(realpath "$git_dir")")
+	repo=$(basename "$repo_path")
 	echo
-	echo "================ ℹ️  Pulling $repo_dir ℹ️  ================"
-	git -C $repo_dir pull
-	echo "================ ℹ️  Pulled $repo_dir ℹ️  ================"
+	echo "================ ℹ️  Pulling $repo ℹ️  ================"
+	git -C "$repo_path" pull
+	echo "================ ℹ️  Pulled  $repo ℹ️  ================"
 	echo
 done
