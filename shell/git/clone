@@ -16,25 +16,20 @@ fi
 
 # ──────────────── Functions ────────────────
 
-# Fetch repositories for a user
 fetch_repos() {
 	local author="$1"
 	local page=1
 
 	while :; do
 		response=$(curl -s "https://api.github.com/users/$author/repos?per_page=100&page=$page")
-
 		if [ "$(echo "$response" | jq length)" -eq 0 ]; then
 			break
 		fi
-
 		echo "$response" | jq -r '.[].name'
-
 		page=$((page + 1))
 	done
 }
 
-# Clone a single repository
 clone_repo() {
 	local repo="$1"
 	local clone_url
@@ -51,22 +46,24 @@ clone_repo() {
 		return
 	fi
 
-	echo "================ ℹ️  Git progress ℹ️  ================"
-	git clone "$clone_url" "$repo_dir/"
-	echo "================ ℹ️  Git progress ℹ️  ================"
-	echo "✅ Successfully cloned '$AUTHOR/$repo'"
-	echo
+	(
+		output=$(
+			{
+				echo "================ ℹ️  Cloning $repo ℹ️  ================"
+				git clone "$clone_url" "$repo_dir/"
+				echo "================ ✅ Cloned $repo ✅ ==================="
+			} 2>&1
+		)
+		echo "$output"
+	) &
 }
 
 # ──────────────── Argument Parsing ────────────────
 if [ "$#" -gt 3 ]; then
-	echo "ℹ️  Usage:"
-	echo "  $0 [SSH/HTTPS] [Author] [Repository]"
-	echo "     All optional, but must be in this order."
+	echo "ℹ️  Usage: $0 [SSH/HTTPS] [Author] [Repository]"
 	exit 1
 fi
 
-# Read inputs
 echo "ℹ️  Inputs:"
 
 case "$#" in
@@ -108,7 +105,7 @@ fi
 echo
 
 # ──────────────── Main Logic ────────────────
-if [ -z "$REPO" ]; then
+if [ -z "$REPO" ] || [ "${REPO^^}" = "ALL" ]; then
 	echo "ℹ️  Fetching all repositories for '$AUTHOR'..."
 	mapfile -t repos < <(fetch_repos "$AUTHOR")
 
@@ -123,6 +120,9 @@ if [ -z "$REPO" ]; then
 	for repo in "${repos[@]}"; do
 		clone_repo "$repo"
 	done
+
+	wait
 else
 	clone_repo "$REPO"
+	wait
 fi

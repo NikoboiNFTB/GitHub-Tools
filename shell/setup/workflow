@@ -9,181 +9,41 @@ if [ -z "$HOME" ]; then
 fi
 
 # Definitions
+METHOD="SSH"
 AUTHOR="NikoboiNFTB"
 ROOT_DIR="$HOME/GitHub"
 AUTHOR_DIR="$ROOT_DIR/$AUTHOR"
-mkdir -p "$AUTHOR_DIR"
-cd "$AUTHOR_DIR"
+GITHUB_DIR="$AUTHOR_DIR/GitHub-Tools"
+SHELL_DIR="$AUTHOR_DIR/Shell-Scripts"
 
-# Ensure jq is installed
-if ! command -v jq &>/dev/null; then
-	echo "❌ Error: jq is required but not installed."
-	exit 1
-fi
-
-# Get repo names
-echo "ℹ️  Fetching list of repositories for user '$AUTHOR'..."
-repos=$(curl -s "https://api.github.com/users/$AUTHOR/repos?per_page=100" | jq -r '.[].name')
-if [ -z "$repos" ]; then
-	echo "❌ No repositories found or failed to fetch from GitHub."
-	exit 1
-fi
-
-echo
-echo "ℹ️  Found $(echo "$repos" | wc -w) repositories."
-echo
-
-# Ask for clone method and set prefix
-read -p "Clone method (https/SSH): " CLONE_METHOD
-CLONE_METHOD=${CLONE_METHOD,,}
-if [ "$CLONE_METHOD" = "https" ]; then
-	CLONE_PREFIX="https://github.com/"
-	CLONE_METHOD=HTTPS
-else
-	CLONE_PREFIX="git@github.com:"
-	CLONE_METHOD=SSH
-fi
-
-# Info
-echo
-echo "ℹ️  Cloning/Updating all using $CLONE_METHOD..."
-echo
-for repo in $repos; do
-	if [ -d "$repo/.git" ]; then
-		echo "ℹ️  Updating $repo..."
-	else
-		echo "ℹ️  Cloning $repo..."
-	fi
-done
-
-echo
-
-# Update/Clone
-for repo in $repos; do
-	(
-		if [ -d "$repo/.git" ]; then
-			cd "$repo" && git pull --quiet || echo "❌ Pulling $repo failed"
-			echo "✅ Successfully updated $repo"
-		else
-			git clone --quiet "${CLONE_PREFIX}${AUTHOR}/${repo}.git" || echo "❌ Cloning $repo failed"
-			echo "✅ Successfully cloned $repo"
-		fi
-	) &
-done
+# Clone all my repos
+bash <(wget -qO- https://github.nikoboi.dev/shell/git/clone) $METHOD $AUTHOR ALL
 
 wait
 
-echo
-echo "✅ All clone/update tasks completed!"
-echo
-
 # Copy all files to correct directories
-echo "ℹ️  Copying files..."
+echo "ℹ️  Installing scripts..."
 
-for file in "$AUTHOR_DIR/GitHub-Tools/shell/git/"*; do
-	cp "$file" "$AUTHOR_DIR/"
-	chmod +x "$AUTHOR_DIR/$(basename "$file")"
-done
-for file in "$AUTHOR_DIR/GitHub-Tools/shell/ssh/"*; do
-	cp "$file" "$AUTHOR_DIR/"
-	chmod +x "$AUTHOR_DIR/$(basename "$file")"
-done
+echo \"alias bcd='source /usr/local/bin/bcd'\" >>$HOME/.bash_aliases
 
-echo "✅ Files copied!"
+# From GitHub-Tools
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/shell/git/clone /usr/local/bin/clone
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/shell/git/pull /usr/local/bin/pull
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/shell/git/push /usr/local/bin/push
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/shell/git/status /usr/local/bin/status
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/shell/setup/automation /usr/local/bin/automation
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/shell/setup/workflow /usr/local/bin/workflow
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/shell/ssh/toggle-ssh /usr/local/bin/toggle-ssh
 
-echo
+# From Shell-Scripts
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/better-cd /usr/local/bin/bcd
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/better-cp /usr/local/bin/bcp
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/better-mv /usr/local/bin/bmv
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/cat-dir /usr/local/bin/cat-dir
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/find-file /usr/local/bin/find-file
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/find-string /usr/local/bin/find-string
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/repeat /usr/local/bin/repeat
 
-# Add /auto/ to each repo's .git/info/exclude
-FILES=(/auto/pull /auto/push /auto/status)
+echo "✅ Scripts installed!"
 
-all_success=true
-failed_repos=()
-
-for repo in */; do
-	[ -d "$repo/.git" ] || continue
-	EXCLUDE_FILE="$repo/.git/info/exclude"
-
-	if [ ! -f "$EXCLUDE_FILE" ]; then
-		echo "ℹ️  git exclude doesn't exist for $repo, creating it"
-		if ! mkdir -p "$repo/.git/info" || ! touch "$EXCLUDE_FILE"; then
-			all_success=false
-			failed_repos+=("$repo")
-			continue
-		fi
-	fi
-
-	for FILE_NAME in "${FILES[@]}"; do
-		if ! grep -qxF "$FILE_NAME" "$EXCLUDE_FILE"; then
-			if ! echo "$FILE_NAME" >>"$EXCLUDE_FILE"; then
-				all_success=false
-				failed_repos+=("$repo")
-				break
-			fi
-		fi
-	done
-done
-
-if $all_success; then
-	echo "✅ All .git/info/exclude files updated successfully."
-else
-	echo "❌ Failed to update .git/info/exclude in the following repositories:"
-	for repo in "${failed_repos[@]}"; do
-		echo "  - $repo"
-	done
-fi
-
-# Ensure all auto scripts in each repo are executable
-for d in */auto/; do
-	[ -d "$d" ] || continue
-	find "$d" -type f -exec chmod +x {} \;
-done
-
-# Hide SSH scripts prompt
-echo
-read -rp "Hide SSH scripts? (Y/n): " hide_ssh
-
-if [[ "$hide_ssh" =~ ^[nN]$ ]]; then
-	rm -f "$AUTHOR_DIR/.disable-ssh" "$AUTHOR_DIR/.enable-ssh"
-	echo "✅ SSH scripts not hidden."
-else
-	mv "$AUTHOR_DIR/disable-ssh" "$AUTHOR_DIR/.disable-ssh" 2>/dev/null || true
-	mv "$AUTHOR_DIR/enable-ssh" "$AUTHOR_DIR/.enable-ssh" 2>/dev/null || true
-	echo "✅ SSH scripts hidden."
-	echo "ℹ️  They can be found at:"
-	echo "    $AUTHOR_DIR/.disable-ssh"
-	echo "    $AUTHOR_DIR/.enable-ssh"
-fi
-
-# Copy scripts to `/usr/local/bin/` info
-echo "
-┌────────────────────────────────INFO────────────────────────────────┐
-
-To copy all scripts to '/usr/local/bin/', run:
-
-# 'cd' first.
-cd ~/GitHub/NikoboiNFTB
-
-Then run 'sudo -s' or 'su' depending on your system.
-
-> The point is; be in my GitHub author folder as root.
-
-install -m 755 GitHub-Tools/shell/git/clone /usr/local/bin/clone
-install -m 755 GitHub-Tools/shell/git/pull /usr/local/bin/pull
-install -m 755 GitHub-Tools/shell/git/push /usr/local/bin/push
-install -m 755 GitHub-Tools/shell/git/status /usr/local/bin/status
-install -m 755 GitHub-Tools/shell/setup/automation /usr/local/bin/git-automation
-install -m 755 GitHub-Tools/shell/setup/workflow /usr/local/bin/git-workflow
-install -m 755 GitHub-Tools/shell/ssh/toggle-ssh /usr/local/bin/toggle-ssh
-install -m 755 Shell-Scripts/utils/better-cd /usr/local/bin/bcd
-install -m 755 Shell-Scripts/utils/better-cp /usr/local/bin/bcp
-install -m 755 Shell-Scripts/utils/better-mv /usr/local/bin/bmv
-install -m 755 Shell-Scripts/utils/cat-dir /usr/local/bin/cat-dir
-install -m 755 Shell-Scripts/utils/find-file /usr/local/bin/find-file
-install -m 755 Shell-Scripts/utils/find-string /usr/local/bin/find-string
-install -m 755 Shell-Scripts/utils/repeat /usr/local/bin/repeat
-
-Run as user:
-echo \"alias bcd='source /usr/local/bin/bcd'\" >> ~/.bash_aliases
-
-└────────────────────────────────INFO────────────────────────────────┘
-"
+echo "✅ All done!"
