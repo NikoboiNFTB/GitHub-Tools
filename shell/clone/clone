@@ -8,12 +8,6 @@ if [ -z "$HOME" ]; then
 	exit 1
 fi
 
-# Ensure jq is installed
-if ! command -v jq &>/dev/null; then
-	echo "❌ Error: jq is required but not installed."
-	exit 1
-fi
-
 # Convert arguments to operations
 if [ "$#" -gt 3 ]; then
 	echo "ℹ️  Usage:"
