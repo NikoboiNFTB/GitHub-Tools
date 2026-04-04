@@ -25,6 +25,6 @@ while read -r git_folder; do
 		)
 		echo "$output"
 	) &
-done < <(find . -name ".git" -type d | sort)
+done < <(find . -name ".git" -type d)
 
 wait
