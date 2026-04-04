@@ -189,15 +189,10 @@ Then run 'sudo -s' or 'su' depending on your system.
 
 > The point is; be in my GitHub author folder as root.
 
-install -m 755 GitHub-Tools/shell/bulk/all-pull /usr/local/bin/all-pull
-install -m 755 GitHub-Tools/shell/bulk/all-push /usr/local/bin/all-push
-install -m 755 GitHub-Tools/shell/bulk/all-status /usr/local/bin/all-status
-install -m 755 GitHub-Tools/shell/clone/clone-author /usr/local/bin/clone-author
-install -m 755 GitHub-Tools/shell/clone/clone-repo /usr/local/bin/clone-repo
-install -m 755 GitHub-Tools/shell/mass/mass-pull /usr/local/bin/mass-pull
-install -m 755 GitHub-Tools/shell/repo/pull /usr/local/bin/pull
-install -m 755 GitHub-Tools/shell/repo/push /usr/local/bin/push
-install -m 755 GitHub-Tools/shell/repo/status /usr/local/bin/status
+install -m 755 GitHub-Tools/shell/git/clone /usr/local/bin/clone
+install -m 755 GitHub-Tools/shell/git/pull /usr/local/bin/pull
+install -m 755 GitHub-Tools/shell/git/push /usr/local/bin/push
+install -m 755 GitHub-Tools/shell/git/status /usr/local/bin/status
 install -m 755 GitHub-Tools/shell/setup/automation /usr/local/bin/git-automation
 install -m 755 GitHub-Tools/shell/setup/workflow /usr/local/bin/git-workflow
 install -m 755 GitHub-Tools/shell/ssh/toggle-ssh /usr/local/bin/toggle-ssh

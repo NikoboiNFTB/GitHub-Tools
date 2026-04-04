@@ -1,0 +1,128 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Ensure $HOME exists
+if [ -z "$HOME" ]; then
+	echo "❌ HOME variable not set!"
+	exit 1
+fi
+
+# Ensure jq is installed
+if ! command -v jq &>/dev/null; then
+	echo "❌ Error: jq is required but not installed."
+	exit 1
+fi
+
+# ──────────────── Functions ────────────────
+
+# Fetch repositories for a user
+fetch_repos() {
+	local author="$1"
+	local page=1
+
+	while :; do
+		response=$(curl -s "https://api.github.com/users/$author/repos?per_page=100&page=$page")
+
+		if [ "$(echo "$response" | jq length)" -eq 0 ]; then
+			break
+		fi
+
+		echo "$response" | jq -r '.[].name'
+
+		page=$((page + 1))
+	done
+}
+
+# Clone a single repository
+clone_repo() {
+	local repo="$1"
+	local clone_url
+	local repo_dir="$HOME/GitHub/$AUTHOR/$repo"
+
+	if [ "$METHOD" = "SSH" ]; then
+		clone_url="git@github.com:$AUTHOR/$repo.git"
+	else
+		clone_url="https://github.com/$AUTHOR/$repo.git"
+	fi
+
+	if [ -e "$repo_dir" ]; then
+		echo "⚠️  Skipping existing: $AUTHOR/$repo"
+		return
+	fi
+
+	echo "================ ℹ️  Git progress ℹ️  ================"
+	git clone "$clone_url" "$repo_dir/"
+	echo "================ ℹ️  Git progress ℹ️  ================"
+	echo "✅ Successfully cloned '$AUTHOR/$repo'"
+	echo
+}
+
+# ──────────────── Argument Parsing ────────────────
+if [ "$#" -gt 3 ]; then
+	echo "ℹ️  Usage:"
+	echo "  $0 [SSH/HTTPS] [Author] [Repository]"
+	echo "     All optional, but must be in this order."
+	exit 1
+fi
+
+# Read inputs
+echo "ℹ️  Inputs:"
+
+case "$#" in
+3)
+	METHOD="$1"
+	AUTHOR="$2"
+	REPO="$3"
+	echo "   Method: $METHOD"
+	echo "   Author: $AUTHOR"
+	echo "   Repo:   ${REPO:-ALL}"
+	;;
+2)
+	METHOD="$1"
+	AUTHOR="$2"
+	echo "   Method: $METHOD"
+	echo "   Author: $AUTHOR"
+	read -rp "   Repo:   ALL (leave empty to clone all): " REPO
+	;;
+1)
+	METHOD="$1"
+	echo "   Method: $METHOD"
+	read -rp "   Author: " AUTHOR
+	read -rp "   Repo:   ALL (leave empty to clone all): " REPO
+	;;
+0)
+	read -rp "   Method: " METHOD
+	read -rp "   Author: " AUTHOR
+	read -rp "   Repo:   ALL (leave empty to clone all): " REPO
+	;;
+esac
+
+METHOD="${METHOD,,}"
+if [ "$METHOD" = "ssh" ]; then
+	METHOD="SSH"
+else
+	METHOD="HTTPS"
+fi
+
+echo
+
+# ──────────────── Main Logic ────────────────
+if [ -z "$REPO" ]; then
+	echo "ℹ️  Fetching all repositories for '$AUTHOR'..."
+	mapfile -t repos < <(fetch_repos "$AUTHOR")
+
+	if [ "${#repos[@]}" -eq 0 ]; then
+		echo "❌ No repositories found."
+		exit 1
+	fi
+
+	echo "Found ${#repos[@]} repositories."
+	echo
+
+	for repo in "${repos[@]}"; do
+		clone_repo "$repo"
+	done
+else
+	clone_repo "$REPO"
+fi
