@@ -80,26 +80,13 @@ echo
 # Copy all files to correct directories
 echo "ℹ️  Copying files..."
 
-mkdir -p auto
-for file in "$AUTHOR_DIR/GitHub-Tools/shell/repo/"*; do
-	cp "$file" "$AUTHOR_DIR/auto/"
-	chmod +x "$AUTHOR_DIR/auto/$(basename "$file")"
-done
-for file in "$AUTHOR_DIR/GitHub-Tools/shell/bulk/"*; do
+for file in "$AUTHOR_DIR/GitHub-Tools/shell/git/"*; do
 	cp "$file" "$AUTHOR_DIR/"
 	chmod +x "$AUTHOR_DIR/$(basename "$file")"
-done
-for file in "$AUTHOR_DIR/GitHub-Tools/shell/clone/"*; do
-	cp "$file" "$ROOT_DIR/"
-	chmod +x "$ROOT_DIR/$(basename "$file")"
 done
 for file in "$AUTHOR_DIR/GitHub-Tools/shell/ssh/"*; do
 	cp "$file" "$AUTHOR_DIR/"
 	chmod +x "$AUTHOR_DIR/$(basename "$file")"
-done
-for file in "$AUTHOR_DIR/GitHub-Tools/shell/mass/"*; do
-	cp "$file" "$ROOT_DIR/"
-	chmod +x "$ROOT_DIR/$(basename "$file")"
 done
 
 echo "✅ Files copied!"
