@@ -8,124 +8,51 @@ if [ -z "$HOME" ]; then
 	exit 1
 fi
 
-# Get username from first argument or prompt
-AUTHOR="$1"
-
-if [ -z "$AUTHOR" ]; then
-	read -rp "Enter the GitHub username of the target user: " AUTHOR
-fi
-
-AUTHOR=${AUTHOR// /} # remove spaces just in case
-
-echo
-
-if [ -z "$AUTHOR" ]; then
-	echo "❌ No username provided. Exiting."
-	exit 1
-fi
-
-# Define directories
+# Definitions
+METHOD="SSH"
+AUTHOR="NikoboiNFTB"
 ROOT_DIR="$HOME/GitHub"
 AUTHOR_DIR="$ROOT_DIR/$AUTHOR"
+GITHUB_DIR="$AUTHOR_DIR/GitHub-Tools"
+SHELL_DIR="$AUTHOR_DIR/Shell-Scripts"
 
-# Check if author's GitHub folder exists
+# Clone my repos
+if [ ! -d "$GITHUB_DIR" ]; then
+	bash <(wget -qO- https://github.nikoboi.dev/shell/git/clone) $METHOD $AUTHOR GitHub-Tools
+else
+	git -C $GITHUB_DIR pull
+fi
 if [ ! -d "$AUTHOR_DIR" ]; then
-	echo "❌ The folder '$AUTHOR_DIR' does not exist."
-	echo "ℹ️  Repos for '$AUTHOR' must be in '$AUTHOR_DIR'"
-	exit 1
-fi
-
-cd "$AUTHOR_DIR"
-
-# Ensure jq is installed
-if ! command -v jq &>/dev/null; then
-	echo "❌ Error: jq is required but not installed."
-	exit 1
-fi
-
-# Clone GitHub-Tools repo
-TOOLS_DIR="$ROOT_DIR/NikoboiNFTB/GitHub-Tools"
-mkdir -p "$(dirname "$TOOLS_DIR")"
-
-if [ -d "$TOOLS_DIR/.git" ]; then
-	echo "ℹ️  Updating GitHub-Tools..."
-	cd "$TOOLS_DIR" && git pull --quiet || echo "❌ Pulling GitHub-Tools failed"
+	bash <(wget -qO- https://github.nikoboi.dev/shell/git/clone) $METHOD $AUTHOR Shell-Scripts
 else
-	echo "ℹ️  Cloning GitHub-Tools..."
-	git clone --quiet https://github.com/NikoboiNFTB/GitHub-Tools.git "$TOOLS_DIR" || echo "❌ Cloning GitHub-Tools failed"
+	git -C $AUTHOR_DIR pull
 fi
 
-echo
+wait
 
-cd "$AUTHOR_DIR"
+# Copy all files to correct directories
+echo "ℹ️  Installing scripts..."
 
-# Copy workflow scripts from GitHub-Tools to correct locations
-echo "ℹ️  Copying files..."
+echo \"alias bcd='source /usr/local/bin/bcd'\" >>$HOME/.bash_aliases
 
-mkdir -p "$AUTHOR_DIR/auto"
+# From GitHub-Tools
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/shell/git/clone /usr/local/bin/clone
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/shell/git/pull /usr/local/bin/pull
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/shell/git/push /usr/local/bin/push
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/shell/git/status /usr/local/bin/status
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/shell/setup/automation /usr/local/bin/automation
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/shell/setup/workflow /usr/local/bin/workflow
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/shell/ssh/toggle-ssh /usr/local/bin/toggle-ssh
 
-# repo/ → $AUTHOR_DIR
-for file in "$TOOLS_DIR/shell/repo/"*; do
-	cp "$file" "$AUTHOR_DIR/auto/" || echo "❌ Failed to copy $file"
-	chmod +x "$AUTHOR_DIR/auto/$(basename "$file")"
-done
+# From Shell-Scripts
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/better-cd /usr/local/bin/bcd
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/better-cp /usr/local/bin/bcp
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/better-mv /usr/local/bin/bmv
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/cat-dir /usr/local/bin/cat-dir
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/find-file /usr/local/bin/find-file
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/find-string /usr/local/bin/find-string
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/repeat /usr/local/bin/repeat
 
-# bulk/ → $AUTHOR_DIR
-for file in "$TOOLS_DIR/shell/bulk/"*; do
-	cp "$file" "$AUTHOR_DIR/" || echo "❌ Failed to copy $file"
-	chmod +x "$AUTHOR_DIR/$(basename "$file")"
-done
+echo "✅ Scripts installed!"
 
-# clone/ → $ROOT_DIR
-for file in "$TOOLS_DIR/shell/clone/"*; do
-	cp "$file" "$ROOT_DIR/" || echo "❌ Failed to copy $file"
-	chmod +x "$ROOT_DIR/$(basename "$file")"
-done
-
-# ssh/ → $AUTHOR_DIR
-for file in "$TOOLS_DIR/shell/ssh/"*; do
-	cp "$file" "$AUTHOR_DIR/" || echo "❌ Failed to copy $file"
-	chmod +x "$AUTHOR_DIR/$(basename "$file")"
-done
-
-# mass/ → $ROOT_DIR
-for file in "$TOOLS_DIR/shell/mass/"*; do
-	cp "$file" "$ROOT_DIR/" || echo "❌ Failed to copy $file"
-	chmod +x "$ROOT_DIR/$(basename "$file")"
-done
-
-echo "✅ Files copied!"
-
-# Add auto/ to */.git/info/exclude
-FILES=(/auto/pull /auto/push /auto/status)
-
-for d in */; do
-	[ "$d" = "auto/" ] && continue
-	repo_git="$d/.git/info/exclude"
-	if [ -f "$repo_git" ]; then
-		for FILE_NAME in "${FILES[@]}"; do
-			if ! grep -qxF "$FILE_NAME" "$repo_git"; then
-				echo "$FILE_NAME" >>"$repo_git"
-			fi
-		done
-	fi
-	cp -r auto "$d" 2>/dev/null || echo "❌ Failed to copy auto to $d"
-done
-
-rm -rf auto 2>/dev/null
-
-# Hide SSH scripts prompt
-echo
-read -rp "Hide SSH scripts? (Y/n): " hide_ssh
-
-if [[ "$hide_ssh" =~ ^[nN]$ ]]; then
-	rm -f "$AUTHOR_DIR/.disable-ssh" "$AUTHOR_DIR/.enable-ssh"
-	echo "✅ SSH scripts not hidden."
-else
-	mv "$AUTHOR_DIR/disable-ssh" "$AUTHOR_DIR/.disable-ssh" 2>/dev/null || true
-	mv "$AUTHOR_DIR/enable-ssh" "$AUTHOR_DIR/.enable-ssh" 2>/dev/null || true
-	echo "✅ SSH scripts hidden."
-	echo "ℹ️  They can be found at:"
-	echo "    $AUTHOR_DIR/.disable-ssh"
-	echo "    $AUTHOR_DIR/.enable-ssh"
-fi
+echo "✅ All done!"
