@@ -18,13 +18,9 @@ while read -r git_folder; do
 	(
 		output=$(
 			{
-				echo
-				echo
 				echo "──────────────── ℹ️  Pulling $repo_name ℹ️  ────────────────"
 				git -C "$full_path" pull
 				echo "──────────────── ℹ️  Pulled $repo_name ℹ️  ─────────────────"
-				echo
-				echo
 			} 2>&1
 		)
 		echo "$output"
