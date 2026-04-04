@@ -132,15 +132,6 @@ else
 	done
 fi
 
-# Add auto/ to repos
-for d in */; do
-	if [ "$d" != "auto/" ]; then
-		cp -r auto "$d" || echo "❌ Failed to copy auto to $d"
-	fi
-done
-
-rm -rf auto || echo "❌ Failed to remove temporary auto folder"
-
 # Ensure all auto scripts in each repo are executable
 for d in */auto/; do
 	[ -d "$d" ] || continue
