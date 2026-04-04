@@ -1,8 +1,7 @@
 > [!WARNING]
 > Several of the SSH related tools (including setting up and using) may be broken right now.
 >
-> This repository is also undergoing large changes.
-> All repo/author/universal scripts will be combined to a single script under [`shell/all`](/shell/all/).
+> This repository is also undergoing large changes. All repo/author/universal scripts will be combined to a single script under [`shell/all`](/shell/all/). `*.md` file link paths will be fixed _after_ the major changes, so they will be broken for now.
 
 # GitHub-Tools
 
