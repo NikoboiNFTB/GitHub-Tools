@@ -53,5 +53,6 @@ elif [ -f "$SSH_DIR_BAK/$SSH_KEY" ] && [ -f "$SSH_DIR_BAK/$SSH_KEY.pub" ]; then
 	enable_ssh
 else
 	echo "❌ Failed to find both private and public SSH keys in '$SSH_DIR' or '$SSH_DIR_BAK'"
+	echo "   ℹ️  Please to something about that"
 	exit 1
 fi
