@@ -1,6 +1,3 @@
-> [!WARNING]
-> Not updated.
-
 # Git Scripts
 
 Powerful scripts for `git`. All scripts should be saved into `/usr/local/bin/`.
