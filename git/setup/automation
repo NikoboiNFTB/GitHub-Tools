@@ -25,7 +25,7 @@ fi
 if [ ! -d "$AUTHOR_DIR" ]; then
 	bash <(wget -qO- https://github.nikoboi.dev/shell/git/clone) $METHOD $AUTHOR Shell-Scripts
 else
-	git -C $AUTHOR_DIR pull
+	git -C $SHELL_DIR pull
 fi
 
 wait
