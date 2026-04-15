@@ -51,6 +51,7 @@ sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/better-mv /usr/local/bin/bmv
 sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/cat-dir /usr/local/bin/cat-dir
 sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/find-file /usr/local/bin/find-file
 sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/find-string /usr/local/bin/find-string
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/linkify /usr/local/bin/linkify
 sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/repeat /usr/local/bin/repeat
 
 echo "✅ Scripts installed!"
