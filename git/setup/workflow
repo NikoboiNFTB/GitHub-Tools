@@ -24,7 +24,7 @@ wait
 # Copy all files to correct directories
 echo "ℹ️  Installing scripts..."
 
-echo \"alias bcd='source /usr/local/bin/bcd'\" >>$HOME/.bash_aliases
+grep -qxF "alias bcd='source /usr/local/bin/bcd'" "$HOME/.bash_aliases" || echo "alias bcd='source /usr/local/bin/bcd'" >>"$HOME/.bash_aliases"
 
 # From GitHub-Tools
 sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/shell/git/clone /usr/local/bin/clone

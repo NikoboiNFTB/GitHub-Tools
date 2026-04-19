@@ -31,11 +31,11 @@ while read -r git_folder; do
 	(
 		output=$(
 			{
-				echo "──────────────── ℹ️  Pulling $repo_name ℹ️  ────────────────"
+				echo "──────────────── ℹ️  Pushing $repo_name ℹ️  ────────────────"
 				git -C "$full_path" add .
 				git -C "$full_path" commit -m "$commit_msg"
 				git -C "$full_path" push
-				echo "──────────────── ℹ️  Pulled $repo_name ℹ️  ─────────────────"
+				echo "──────────────── ℹ️  Pushed $repo_name ℹ️  ─────────────────"
 			} 2>&1
 		)
 		echo "$output"
