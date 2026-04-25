@@ -45,6 +45,7 @@ sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/git/status /usr/local/bin/status
 sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/git/toggle-ssh /usr/local/bin/toggle-ssh
 
 # From Shell-Scripts
+sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/bluetooth/ds4 /usr/local/bin/ds4
 sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/random/linkify /usr/local/bin/linkify
 sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/random/shaify /usr/local/bin/shaify
 sudo install -m 755 $AUTHOR_DIR/Shell-Scripts/utils/better-cd /usr/local/bin/bcd
