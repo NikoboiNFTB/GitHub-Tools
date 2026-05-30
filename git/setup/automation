@@ -36,11 +36,11 @@ echo "ℹ️  Installing scripts..."
 grep -qxF "alias bcd='source /usr/local/bin/bcd'" "$HOME/.bash_aliases" || echo "alias bcd='source /usr/local/bin/bcd'" >>"$HOME/.bash_aliases"
 
 # From GitHub-Tools
-sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/git/setup/automation /usr/local/bin/automation
-sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/git/setup/workflow /usr/local/bin/workflow
 sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/git/clone /usr/local/bin/clone
 sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/git/pull /usr/local/bin/pull
 sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/git/push /usr/local/bin/push
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/git/setup/automation /usr/local/bin/automation
+sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/git/setup/workflow /usr/local/bin/workflow
 sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/git/status /usr/local/bin/status
 sudo install -m 755 $AUTHOR_DIR/GitHub-Tools/git/toggle-ssh /usr/local/bin/toggle-ssh
 

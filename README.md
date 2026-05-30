@@ -1,5 +1,6 @@
 > [!WARNING]
 > [`/docs/`](/docs/) are not updated.
+> Their info is likely somewhat reliable but do not trust the links.
 
 # GitHub-Tools
 
@@ -42,7 +43,7 @@ wget https://github.nikoboi.dev/git/*
 Or run the automation setup script. Run anywhere (the script self-corrects using `$HOME`, `mkdir -p` and `cd`):
 
 ```bash
-bash <(wget -qO- https://github.nikoboi.dev/shell/setup/automation)
+bash <(wget -qO- https://github.nikoboi.dev/git/setup/automation)
 ```
 
 The `automation` setup script also works as an update script.
