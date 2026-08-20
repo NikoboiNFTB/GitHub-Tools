@@ -1,12 +1,12 @@
 ! Title: GitHub Filters by Nikoboi
 ! Description: Removes user profile pictures.
-! Homepage: https://nikoboi.dev/
+! Homepage: https://block.nikoboi.dev/
 ! Author: Nikoboi
-! License: GNU General Public License v3.0 | https://github.com/NikoboiNFTB/GitHub-Tools/blob/main/LICENSE
-! Source: https://github.nikoboi.dev/blocklist.txt
-! Issues: https://github.com/NikoboiNFTB/GitHub-Tools/issues
-! Pull Requests: https://github.com/NikoboiNFTB/GitHub-Tools/pulls
-! Last updated: 2026-03-24 12:13 UTC+02:00
+! License: GNU General Public License v3.0 | https://github.com/NikoboiNFTB/Blocklists/blob/main/LICENSE
+! Source: https://block.nikoboi.dev/list/github.com
+! Issues: https://github.com/NikoboiNFTB/Blocklists/issues
+! Pull Requests: https://github.com/NikoboiNFTB/Blocklists/pulls
+! Last updated: 2026-08-21 00:05 UTC+03:00
 ! Expires: 7 days
 
 ! ========================================
