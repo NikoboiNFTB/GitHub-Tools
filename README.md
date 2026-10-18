@@ -1,6 +1,5 @@
 > [!WARNING]
-> [`/docs/`](/docs/) are not updated.
-> Their info is likely somewhat reliable but do not trust the links.
+> [`/docs/`](/docs/) are not updated. Their info is likely somewhat reliable but do not trust the links.
 
 # GitHub-Tools
 
@@ -38,7 +37,7 @@ You can grab any one of the scripts into any folder simply by running:
 wget https://github.nikoboi.dev/git/*
 ```
 
-> > Fill in the path to the script. [github.nikoboi.dev](https://github.nikoboi.dev/) resolves to this repository.
+> Fill in the path to the script. [github.nikoboi.dev](https://github.nikoboi.dev/) resolves to this repository.
 
 Or run the automation setup script. Run anywhere (the script self-corrects using `$HOME`, `mkdir -p` and `cd`):
 
@@ -48,7 +47,7 @@ bash <(wget -qO- https://github.nikoboi.dev/git/setup/automation)
 
 The `automation` setup script also works as an update script.
 
-> > Will setup my entire automation workflow. All scripts will be installed to `/usr/local/bin/`.
+> Will setup my entire automation workflow. All scripts will be installed to `/usr/local/bin/`.
 
 ## Contributing
 
