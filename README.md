@@ -13,13 +13,13 @@ Each entry can be clicked for a detailed description of each script.
 
 ### Shell
 
-| Script                          | Description                   | README                            |
-| ------------------------------- | ----------------------------- | --------------------------------- |
-| [`clone`](/git/clone)           | Clone repos of any author     | [GIT.md](/docs/GIT.md#clone)      |
-| [`pull`](/git/pull)             | Pull remote changes for repos | [GIT.md](/docs/GIT.md#pull)       |
-| [`push`](/git/push)             | Push local changes for repos  | [GIT.md](/docs/GIT.md#push)       |
-| [`status`](/git/status)         | View Status of repos          | [GIT.md](/docs/GIT.md#status)     |
-| [`toggle-ssh`](/git/toggle-ssh) | Enable your SSH key           | [GIT.md](/docs/GIT.md#toggle-ssh) |
+| Script                  | Description                   | README                        |
+| ----------------------- | ----------------------------- | ----------------------------- |
+| [`clone`](/git/clone)   | Clone repos of any author     | [GIT.md](/docs/GIT.md#clone)  |
+| [`new-repo`]            | Create a new repo on GitHub.  | [N/A]                         |
+| [`pull`](/git/pull)     | Pull remote changes for repos | [GIT.md](/docs/GIT.md#pull)   |
+| [`push`](/git/push)     | Push local changes for repos  | [GIT.md](/docs/GIT.md#push)   |
+| [`status`](/git/status) | View Status of repos          | [GIT.md](/docs/GIT.md#status) |
 
 ### Userscript
 
@@ -38,16 +38,6 @@ wget https://github.nikoboi.dev/git/*
 ```
 
 > Fill in the path to the script. [github.nikoboi.dev](https://github.nikoboi.dev/) resolves to this repository.
-
-Or run the automation setup script. Run anywhere (the script self-corrects using `$HOME`, `mkdir -p` and `cd`):
-
-```bash
-bash <(wget -qO- https://github.nikoboi.dev/git/setup/automation)
-```
-
-The `automation` setup script also works as an update script.
-
-> Will setup my entire automation workflow. All scripts will be installed to `/usr/local/bin/`.
 
 ## Contributing
 
